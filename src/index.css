@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+=======
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -53,6 +59,7 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+>>>>>>> 3d02213a705aa5bbcd5292c53dee280f559901f5
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -66,3 +73,107 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+<<<<<<< HEAD
+
+@layer base {
+  
+:root  {
+    --background: 221.2 0% 100%;
+    --foreground: 221.2 0% 10%;
+    --card: 221.2 0% 100%;
+    --card-foreground: 221.2 0% 15%;
+    --popover: 221.2 0% 100%;
+    --popover-foreground: 221.2 95% 10%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 221.2 10% 90%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 183.2 10% 90%;
+    --muted-foreground: 221.2 0% 40%;
+    --accent: 183.2 10% 90%;
+    --accent-foreground: 221.2 0% 15%;
+    --destructive: 0 50% 50%;
+    --destructive-foreground: 221.2 0% 100%;
+    --border: 221.2 20% 82%;
+    --input: 221.2 20% 50%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+    .show-scrollbar::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.26) !important; /* Color de la parte deslizante */
+      border-radius: 10px !important; /* Esquinas redondeadas */
+    }
+  }
+  .dark  {
+    --background: 221.2 10% 10%;
+    --foreground: 221.2 0% 100%;
+    --card: 221.2 0% 10%;
+    --card-foreground: 221.2 0% 100%;
+    --popover: 221.2 10% 5%;
+    --popover-foreground: 221.2 0% 100%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 221.2 10% 20%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 221.2 0% 65%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 221.2 0% 95%;
+    --destructive: 0 50% 50%;
+    --destructive-foreground: 221.2 0% 100%;
+    --border: 221.2 20% 50%;
+    --input: 221.2 20% 50%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+    .show-scrollbar::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0.137) !important; /* Color de la parte deslizante */
+      border-radius: 10px !important; /* Esquinas redondeadas */
+    }
+  }
+
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Clase para ocultar la barra de desplazamiento */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Ocultar la barra de desplazamiento en todos los navegadores */
+ ::-webkit-scrollbar {
+  display: none; /* Para navegadores basados en WebKit como Chrome y Safari */
+  } 
+  
+  .show-scrollbar {
+    padding: 10px; /* Padding en el eje X (izquierda y derecha) */
+  }
+
+  .show-scrollbar::-webkit-scrollbar {
+      display: block !important; /* Muestra la barra de desplazamiento */
+      width: 6px !important; /* Ancho de la barra de desplazamiento */
+  }
+
+  
+  
+  
+  /* Asegúrate de que el contenido debajo del nav no se superponga */
+
+/* body {
+  padding-top: 90px; /* Ajusta este valor según la altura de tu navbar 
+} */
+
+
+
+=======
+>>>>>>> 3d02213a705aa5bbcd5292c53dee280f559901f5
