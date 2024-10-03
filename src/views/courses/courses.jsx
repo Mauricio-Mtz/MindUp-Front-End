@@ -23,15 +23,15 @@ export default function Courses() {
     useEffect(() => {
         const fetchCourses = async () => {
             const simulatedData = [
-                {id:1, name:'Curso No.1', description:'Curso impartido por Google, en el que se enseña a crear aplicaciones web con sus tecnologías y plataformas.', img:'/image/cursogoogle.png', addedBy:'Google SA de SV'},
-                {id:2, name:'Curso No.2', description:'Curso de desarrollo con React, en el que se enseña a crear componentes y aplicaciones web con la biblioteca de Facebook.', img:'/image/cursoreact.png', addedBy:'Facebook'},
-                {id:3, name:'Curso No.3', description:'Curso de Machine Learning, en el que se enseña a crear modelos de aprendizaje automático con Python y diferentes bibliotecas y frameworks.', img:'/image/cursoml.webp', addedBy:'IBM'},
-                {id:4, name:'Curso No.4', description:'Curso avanzado de Python, en el que se enseña a crear aplicaciones web con Flask y Django, y a utilizar bibliotecas como Pandas y NumPy.', img:'/image/cursopython.jpg', addedBy:'Microsoft'},
-                {id:5, name:'Curso No.5', description:'Curso sobre Docker, en el que se enseña a crear contenedores y a manejar aplicaciones en producción con Docker.', img:'/image/cursodocker.jpg', addedBy:'Docker Inc.' },               
-                {id:6, name:'Curso No.6', description:'Curso de desarrollo con React, en el que se enseña a crear componentes y aplicaciones web con la biblioteca de Facebook.', img:'/image/cursoreact.png', addedBy:'Facebook'},
-                {id:7, name:'Curso No.7', description:'Curso de Machine Learning, en el que se enseña a crear modelos de aprendizaje automático con Python y diferentes bibliotecas y frameworks.', img:'/image/cursoml.webp', addedBy:'IBM'},
-                {id:8, name:'Curso No.8', description:'Curso avanzado de Python, en el que se enseña a crear aplicaciones web con Flask y Django, y a utilizar bibliotecas como Pandas y NumPy.', img:'/image/cursopython.jpg', addedBy:'Microsoft'},
-                {id:9, name:'Curso No.9', description:'Curso sobre Docker, en el que se enseña a crear contenedores y a manejar aplicaciones en producción con Docker.', img:'/image/cursodocker.jpg', addedBy: 'Docker Inc.'}
+                {id:1, name:'Curso No.1', description:'Curso impartido por Google, en el que se enseña a crear aplicaciones web con sus tecnologías y plataformas.', img:'/assets/images/cursogoogle.png', addedBy:'Google SA de SV'},
+                {id:2, name:'Curso No.2', description:'Curso de desarrollo con React, en el que se enseña a crear componentes y aplicaciones web con la biblioteca de Facebook.', img:'/assets/images/cursoreact.png', addedBy:'Facebook'},
+                {id:3, name:'Curso No.3', description:'Curso de Machine Learning, en el que se enseña a crear modelos de aprendizaje automático con Python y diferentes bibliotecas y frameworks.', img:'/assets/images/cursoml.webp', addedBy:'IBM'},
+                {id:4, name:'Curso No.4', description:'Curso avanzado de Python, en el que se enseña a crear aplicaciones web con Flask y Django, y a utilizar bibliotecas como Pandas y NumPy.', img:'/assets/images/cursopython.jpg', addedBy:'Microsoft'},
+                {id:5, name:'Curso No.5', description:'Curso sobre Docker, en el que se enseña a crear contenedores y a manejar aplicaciones en producción con Docker.', img:'/assets/images/cursodocker.jpg', addedBy:'Docker Inc.' },               
+                {id:6, name:'Curso No.6', description:'Curso de desarrollo con React, en el que se enseña a crear componentes y aplicaciones web con la biblioteca de Facebook.', img:'/assets/images/cursoreact.png', addedBy:'Facebook'},
+                {id:7, name:'Curso No.7', description:'Curso de Machine Learning, en el que se enseña a crear modelos de aprendizaje automático con Python y diferentes bibliotecas y frameworks.', img:'/assets/images/cursoml.webp', addedBy:'IBM'},
+                {id:8, name:'Curso No.8', description:'Curso avanzado de Python, en el que se enseña a crear aplicaciones web con Flask y Django, y a utilizar bibliotecas como Pandas y NumPy.', img:'/assets/images/cursopython.jpg', addedBy:'Microsoft'},
+                {id:9, name:'Curso No.9', description:'Curso sobre Docker, en el que se enseña a crear contenedores y a manejar aplicaciones en producción con Docker.', img:'/assets/images/cursodocker.jpg', addedBy: 'Docker Inc.'}
             ];
 
             setTimeout(() => {

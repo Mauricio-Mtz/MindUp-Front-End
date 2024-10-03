@@ -22,8 +22,8 @@ export default function Navbar() {
             <div className="container mx-auto flex justify-between items-center">
                 {/* Logo */}
                 <div className="text-white text-lg font-bold  " onClick={() => navigate('/')}>
-                    <img src="/image/minUP-logo.png" alt="logo" className="w-28 h-auto rounded-lg cursor-pointer dark:hidden" />
-                    <img src="/image/minUP-logo-dark.png" alt="logo" className="w-28 h-auto rounded-lg cursor-pointer hidden dark:block" />
+                    <img src="/assets/images/minUP-logo.png" alt="logo" className="w-28 h-auto rounded-lg cursor-pointer dark:hidden" />
+                    <img src="/assets/images/minUP-logo-dark.png" alt="logo" className="w-28 h-auto rounded-lg cursor-pointer hidden dark:block" />
                 </div>
 
                 <InputSerch />

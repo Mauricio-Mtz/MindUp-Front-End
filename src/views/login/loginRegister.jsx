@@ -203,7 +203,7 @@ export default function LoginRegister() {
         <div className="py-10 px-10 flex flex-col gap-4 md:flex-row justify-center">
             
             <div>
-            <img style={{ borderRadius: "20px" }} src="/image/imgEscribir.jpg" alt="" />
+            <img style={{ borderRadius: "20px" }} src="/assets/images/imgEscribir.jpg" alt="" />
             </div>
 
             <Tabs defaultValue="login" className="w-full md:w-[50%] overflow-y-auto max-h-[550px]">

@@ -14,7 +14,7 @@ function MainPage() {
       <Navbar />
       
       <div className="w-full flex justify-center " style={{ backgroundColor: "#004c83" }}>
-        <img src="/image/banner-principal.png" alt="imgP" style={{ width: "90%" }}/>
+        <img src="/assets/images/banner-principal.png" alt="imgP" style={{ width: "90%" }}/>
       </div>
       <div className='py-3 px-10 flex justify-center'>
         <Button onClick={goToLogin} className="px-10 rounded-full">Entra y registrate aquí.</Button>

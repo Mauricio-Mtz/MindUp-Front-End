@@ -28,21 +28,21 @@ export default function Carousel() {
     <div ref={sliderRef} className="keen-slider w-full h-full mx-full rounded-lg shadow-md ">
       <div className="keen-slider__slide number-slide1">
         <img
-          src="/image/imgEscribir.jpg"
+          src="/assets/images/imgEscribir.jpg"
           alt="Slide 1"
           className="w-full h-full object-cover rounded-lg"
         />
       </div>
       <div className="keen-slider__slide number-slide2">
         <img
-          src="/image/imgEscribir.jpg"
+          src="/assets/images/imgEscribir.jpg"
           alt="Slide 2"
           className="w-full h-full object-cover rounded-lg"
         />
       </div>
       <div className="keen-slider__slide number-slide3">
         <img
-          src="/image/imgEscribir.jpg"
+          src="/assets/images/imgEscribir.jpg"
           alt="Slide 3"
           className="w-full h-full object-cover rounded-lg"
         />
