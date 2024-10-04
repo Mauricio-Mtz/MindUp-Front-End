@@ -14,14 +14,14 @@ export default function Navbar() {
     
     const navigate = useNavigate();
     const goToLogin = () => {
-        navigate('/login');  // Cambia '/nueva-ruta' por la ruta que necesites
+        navigate('/auth');  // Cambia '/nueva-ruta' por la ruta que necesites
     };
 
     return (
         <nav className="bg-white dark:bg-[#1F1F1F] p-4 shadow-md mb-2 " style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.6)"}}>
             <div className="container mx-auto flex justify-between items-center">
                 {/* Logo */}
-                <div className="text-white text-lg font-bold  " onClick={() => navigate('/')}>
+                <div className="text-white text-lg font-bold " onClick={() => navigate('/')}>
                     <img src="/assets/images/minUP-logo.png" alt="logo" className="w-28 h-auto rounded-lg cursor-pointer dark:hidden" />
                     <img src="/assets/images/minUP-logo-dark.png" alt="logo" className="w-28 h-auto rounded-lg cursor-pointer hidden dark:block" />
                 </div>

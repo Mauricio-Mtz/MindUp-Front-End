@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -17,8 +16,7 @@
 }
 
 @layer base {
-  
-:root  {
+  :root {
     --background: 221.2 0% 100%;
     --foreground: 221.2 0% 10%;
     --card: 221.2 0% 100%;
@@ -40,11 +38,16 @@
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
     .show-scrollbar::-webkit-scrollbar-thumb {
-      background-color: rgba(0, 0, 0, 0.26) !important; /* Color de la parte deslizante */
+      background-color: rgba(
+        0,
+        0,
+        0,
+        0.26
+      ) !important; /* Color de la parte deslizante */
       border-radius: 10px !important; /* Esquinas redondeadas */
     }
   }
-  .dark  {
+  .dark {
     --background: 221.2 10% 10%;
     --foreground: 221.2 0% 100%;
     --card: 221.2 0% 10%;
@@ -66,11 +69,15 @@
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
     .show-scrollbar::-webkit-scrollbar-thumb {
-      background-color: rgba(255, 255, 255, 0.137) !important; /* Color de la parte deslizante */
+      background-color: rgba(
+        255,
+        255,
+        255,
+        0.137
+      ) !important; /* Color de la parte deslizante */
       border-radius: 10px !important; /* Esquinas redondeadas */
     }
   }
-
 }
 
 @layer base {
@@ -92,27 +99,15 @@
 }
 
 /* Ocultar la barra de desplazamiento en todos los navegadores */
- ::-webkit-scrollbar {
+::-webkit-scrollbar {
   display: none; /* Para navegadores basados en WebKit como Chrome y Safari */
-  } 
-  
-  .show-scrollbar {
-    padding: 10px; /* Padding en el eje X (izquierda y derecha) */
-  }
+}
 
-  .show-scrollbar::-webkit-scrollbar {
-      display: block !important; /* Muestra la barra de desplazamiento */
-      width: 6px !important; /* Ancho de la barra de desplazamiento */
-  }
+.show-scrollbar {
+  padding: 10px; /* Padding en el eje X (izquierda y derecha) */
+}
 
-  
-  
-  
-  /* Asegúrate de que el contenido debajo del nav no se superponga */
-
-/* body {
-  padding-top: 90px; /* Ajusta este valor según la altura de tu navbar 
-} */
-
-
-
+.show-scrollbar::-webkit-scrollbar {
+  display: block !important; /* Muestra la barra de desplazamiento */
+  width: 6px !important; /* Ancho de la barra de desplazamiento */
+}
