@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 function MainPage() {
   const navigate = useNavigate();
   const goToLogin = () => {
-    navigate('/login');  // Cambia '/nueva-ruta' por la ruta que necesites
+    navigate('/auth');  // Cambia '/nueva-ruta' por la ruta que necesites
   };
   return (
     <div className="scrollbar-hide">

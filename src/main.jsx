@@ -3,11 +3,13 @@ import { createRoot } from 'react-dom/client'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import App from './App.jsx'
 import './index.css'
+import { Toaster } from "@/components/ui/toaster"
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <GoogleOAuthProvider clientId="958356469777-tdc0rd9ap9rm21m82qdhao94v09lola3.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="1026195813411-r4k84hbrrtll08gt4rr2pclnvhhlvt8e.apps.googleusercontent.com">
       <App />
+      <Toaster />
     </GoogleOAuthProvider>
   </StrictMode>,
 )
