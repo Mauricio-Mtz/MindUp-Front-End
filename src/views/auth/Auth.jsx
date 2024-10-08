@@ -7,7 +7,7 @@ import RegisterData from './RegisterData'; // Importa el nuevo formulario
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 
-const SERVER = "http://192.168.0.13:3000/auth"; // Agrega 'http://'
+const SERVER = import.meta.env.VITE_API_URL;
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ export default function Auth() {
   }, [alertData, toast]);
 
   const handleLoginSubmit = (loginData) => {
-    fetch(`${SERVER}/login`, {
+    fetch(`${SERVER}/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export default function Auth() {
   };
 
   const handleRegisterSubmit = (registerData) => {
-    fetch(`${SERVER}/register`, {
+    fetch(`${SERVER}/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export default function Auth() {
   };
   
   const handleRegisterDataSubmit = (completeRegisterData) => {
-    fetch(`${SERVER}/complete-register`, {
+    fetch(`${SERVER}/auth/complete-register`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
