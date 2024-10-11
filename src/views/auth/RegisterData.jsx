@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import ComboContry from "@/components/elementos/comboCountry";
+import ComboContry from "@/components/elements/comboCountry";
 
 export const RegisterData = ({ onRegisterSubmit, setAlertData }) => {
     // Estados para almacenar los valores de los inputs de register

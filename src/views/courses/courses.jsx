@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import Navbar from '../../components/elementos/navbar';
-import { ProgressBar } from '@/components/elementos/progressBar';
+import Navbar from '../../components/elements/navbar';
+import { ProgressBar } from '@/components/elements/progressBar';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
