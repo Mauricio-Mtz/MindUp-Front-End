@@ -1,7 +1,7 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { CircleUser, Menu } from 'lucide-react';
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useDarkMode } from '../../hooks/useDarkMode';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -18,18 +18,18 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="bg-white dark:bg-[#1F1F1F] p-4 shadow-md mb-2 " style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.6)"}}>
-            <div className="container mx-auto flex justify-between items-center">
+        <nav className="bg-white dark:bg-[#1F1F1F] mb-2 shadow-md py-2" style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.6)" }}>
+            <div className="flex items-center justify-between mx-auto px-2 sm:px-5 lg:px-10 xl:px-20">
                 {/* Logo */}
-                <div className="text-white text-lg font-bold " onClick={() => navigate('/')}>
-                    <img src="/assets/images/minUP-logo.png" alt="logo" className="w-28 h-auto rounded-lg cursor-pointer dark:hidden" />
-                    <img src="/assets/images/minUP-logo-dark.png" alt="logo" className="w-28 h-auto rounded-lg cursor-pointer hidden dark:block" />
+                <div className="cursor-pointer font-bold text-lg text-white" onClick={() => navigate('/')}>
+                    <img src="/assets/images/minUP-logo.png" alt="logo" className="h-auto rounded-lg w-28 dark:hidden" />
+                    <img src="/assets/images/minUP-logo-dark.png" alt="logo" className="h-auto hidden rounded-lg w-28 dark:block" />
                 </div>
 
                 <InputSerch />
 
                 {/* Botones de navegación */}
-                <div className="hidden md:flex space-x-4 items-center">
+                <div className="hidden items-center md:flex space-x-4">
                     <Button variant="outline" onClick={goToLogin}>Inicia sesión / Registrate</Button>
                     
                     <DropdownMenu>
@@ -50,21 +50,21 @@ export default function Navbar() {
                             <DropdownMenuItem>Log out</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
+                    
                     {/* Modo oscuro */}
                     <div className="flex items-center space-x-2">
-                        <span className="text-gray-600 dark:text-gray-400">🌞</span>
-                        <Switch checked={isDarkMode} onCheckedChange={toggleDarkMode}  className="dark:bg-secondary border-gray-200 dark:border-gray-700" />
-                        <span className="text-gray-600 dark:text-gray-400">🌜</span>
+                        <span className="dark:text-gray-400 text-gray-600">🌞</span>
+                        <Switch checked={isDarkMode} onCheckedChange={toggleDarkMode} className="border-gray-200 dark:bg-secondary dark:border-gray-700" />
+                        <span className="dark:text-gray-400 text-gray-600">🌜</span>
                     </div> 
                 </div>
 
                 {/* Menú para móviles */}
-                <div className="flex md:hidden items-center">
-                    
+                <div className="flex items-center md:hidden">
                     <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
                         <SheetTrigger asChild>
-                            <Button  onClick={() => setIsMenuOpen(true)}>
-                                <Menu className="h-6 w-6 text-white" />
+                            <Button onClick={() => setIsMenuOpen(true)}>
+                                <Menu className="h-6 text-white w-6" />
                             </Button>
                         </SheetTrigger>
                         <SheetContent side="left" className="p-4">
@@ -89,10 +89,10 @@ export default function Navbar() {
                                         <DropdownMenuItem>Log out</DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
-                                 <div className="flex w-full items-center space-x-2 align-center justify-center">
-                                    <span className="text-gray-600 dark:text-gray-400">🌞</span>
+                                <div className="flex items-center justify-center space-x-2 w-full">
+                                    <span className="dark:text-gray-400 text-gray-600">🌞</span>
                                     <Switch checked={isDarkMode} onCheckedChange={toggleDarkMode} />
-                                    <span className="text-gray-600 dark:text-gray-400">🌜</span>
+                                    <span className="dark:text-gray-400 text-gray-600">🌜</span>
                                 </div> 
                             </nav>
                         </SheetContent>
