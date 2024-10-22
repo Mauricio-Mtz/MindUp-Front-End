@@ -42,7 +42,7 @@ export default function Navbar() {
                             <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuGroup>
-                                <DropdownMenuItem>Perfil</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => {navigate('/profile')}}>Perfil</DropdownMenuItem>
                                 <DropdownMenuItem>Mis Cursos</DropdownMenuItem>
                                 <DropdownMenuItem>Pagos</DropdownMenuItem>
                             </DropdownMenuGroup>
