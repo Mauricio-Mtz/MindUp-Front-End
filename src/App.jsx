@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import MainPage from './views/mainPage.jsx';
 import Auth from './views/auth/Auth.jsx';
 import Catalog from './views/catalog/Catalog.jsx';
+import MyCourses from './views/myCourses/MyCourses.jsx';
 
 function App() {
   return (
@@ -10,7 +11,8 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/catalog/*" element={<Catalog />} /> {/* Usar rutas anidadas */}
+        <Route path="/catalog/*" element={<Catalog />} />
+        <Route path="/my-courses/*" element={<MyCourses />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
