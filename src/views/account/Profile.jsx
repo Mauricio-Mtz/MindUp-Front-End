@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import Navbar from '../../components/elementos/navbar';
-import { ProgressBar } from '@/components/elementos/progressBar';
+import Navbar from '@/components/elements/navbar';
+import { ProgressBar } from '@/components/elements/progressBar';
 import { Button } from "@/components/ui/button";
 
 export default function Profile() {
