@@ -9,13 +9,10 @@ import InputSerch from "./inputSerch";
 import { Switch } from "@/components/ui/switch";
 
 export default function Navbar() {
+    const navigate = useNavigate();
+    
     const [isDarkMode, toggleDarkMode] = useDarkMode();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    
-    const navigate = useNavigate();
-    const goToLogin = () => {
-        navigate('/auth');  // Cambia '/nueva-ruta' por la ruta que necesites
-    };
 
     return (
         <nav className="bg-white dark:bg-[#1F1F1F] mb-2 shadow-md py-2" style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.6)" }}>
@@ -30,7 +27,7 @@ export default function Navbar() {
 
                 {/* Botones de navegación */}
                 <div className="hidden items-center md:flex space-x-4">
-                    <Button variant="outline" onClick={goToLogin}>Inicia sesión / Registrate</Button>
+                    <Button variant="outline" onClick={() => navigate(`/auth`)}>Inicia sesión / Registrate</Button>
                     
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -42,7 +39,9 @@ export default function Navbar() {
                             <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuGroup>
-                                <DropdownMenuItem onClick={() => {navigate('/profile')}}>Perfil</DropdownMenuItem>
+                                <DropdownMenuItem>Perfil</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => navigate('/my-courses')}>Mis Cursos</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => navigate('/profile')}>Perfil</DropdownMenuItem>
                                 <DropdownMenuItem>Mis Cursos</DropdownMenuItem>
                                 <DropdownMenuItem>Pagos</DropdownMenuItem>
                             </DropdownMenuGroup>
@@ -72,7 +71,7 @@ export default function Navbar() {
                                 <SheetTitle>Menú</SheetTitle>
                             </SheetHeader>
                             <nav className="flex flex-col space-y-4">
-                                <Button variant="outline" onClick={goToLogin}>Iniciar Sesión</Button>
+                                <Button variant="outline" onClick={() => navigate(`/auth`)}>Iniciar Sesión</Button>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Button variant="outline">Mi cuenta</Button>
