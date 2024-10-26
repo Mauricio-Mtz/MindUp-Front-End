@@ -45,6 +45,7 @@ export default function Auth() {
     })
     .then(response => response.json())
     .then(userData => {
+      console.log(userData)
         setAlertData({
             type: userData.success,
             description: userData.message
