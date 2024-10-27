@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import NabvarA from "@/components/elements/nabvarAside";
 import HeaderAdmin from "@/components/elements/headerAdmins";
 
-import HomeOrg from "@/views/organizations/homeOrg";
+import HomeOrg from "@/views/organizations/homeOrg/homeOrg";
 import CourseOrg from "@/views/organizations/coursesOrg/coursesOrg"; 
-import Reports from "@/views/organizations/reportsOrg";
-import Members from "@/views/organizations/membersOrg";
+import Reports from "@/views/organizations/reportsOrg/reportsOrg";
+import Members from "@/views/organizations/memberOrg/membersOrg";
 import EditAddCourse from "@/views/organizations/coursesOrg/edit_Add_Course"; 
 
 export default function IndexOrganization() {
