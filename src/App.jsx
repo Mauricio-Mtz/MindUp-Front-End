@@ -5,7 +5,7 @@ import MainPage from './views/mainPage.jsx';
 import Auth from './views/auth/Auth.jsx';
 import Courses from './views/courses/courses.jsx';
 import CourseDetail from './views/courses/course.jsx'; // Renombrado para evitar confusión
-import CourseOrg from './views/organizations/coursesOrg.jsx';
+import CourseOrg from './views/organizations/coursesOrg/coursesOrg.jsx';
 import MembersOrg from './views/organizations/membersOrg.jsx';
 import ReportsOrg from './views/organizations/reportsOrg.jsx';
 import HomeOrg from './views/organizations/homeOrg.jsx';

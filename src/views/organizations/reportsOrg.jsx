@@ -17,10 +17,7 @@ export default function ReportsOrg() {
             hola
             
           </main>
-
         </div>
-
-        
     </div>
-  )
+  );
 }

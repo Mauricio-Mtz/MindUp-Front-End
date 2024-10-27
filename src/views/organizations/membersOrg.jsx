@@ -17,10 +17,7 @@ export default function MembersOrg() {
             hola
             
           </main>
-
         </div>
-
-        
     </div>
-  )
+  );
 }
