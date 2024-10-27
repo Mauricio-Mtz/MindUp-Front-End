@@ -3,23 +3,16 @@ import { LogOut, Home, ScrollText, Users, BookOpen } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useNavigate, useLocation } from 'react-router-dom';
 
-export default function NabvarA() {
+export default function NabvarA({ setSelectedComponent }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const [selected, setSelected] = useState("");
+    const [selected, setSelected] = useState(localStorage.getItem("selectedComponent") || "home");
 
-    // Actualizar el estado seleccionado basado en la ruta actual
-    useEffect(() => {
-        const path = location.pathname;
-        if (path.includes("home")) setSelected("home");
-        else if (path.includes("courses")) setSelected("courses");
-        else if (path.includes("reports")) setSelected("reports");
-        else if (path.includes("members")) setSelected("members");
-    }, [location]);
 
-    const handleNavigate = (path, name) => {
-        navigate(path);
-        setSelected(name);
+    const handleSelect = (componentName) => {
+        setSelected(componentName);
+        setSelectedComponent(componentName);
+
     };
 
     return (
@@ -30,7 +23,7 @@ export default function NabvarA() {
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <div
-                                    onClick={() => handleNavigate("/admin/home", "home")}
+                                    onClick={() => handleSelect("home")}
                                     className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8 mb-1 cursor-pointer ${
                                     selected === "home"
                                         ? "bg-primary text-primary-foreground"
@@ -51,9 +44,9 @@ export default function NabvarA() {
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <div
-                                    onClick={() => handleNavigate("/admin/courses", "courses")}
+                                    onClick={() => handleSelect("courses")}
                                     className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8 mb-1 cursor-pointer ${
-                                    selected === "courses"
+                                    selected === "courses" || selected === "edit" || selected === "add"
                                         ? "bg-primary text-primary-foreground"
                                         : "text-muted-foreground hover:text-foreground"
                                     }`}
@@ -72,7 +65,7 @@ export default function NabvarA() {
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <div
-                                    onClick={() => handleNavigate("/admin/reports", "reports")}
+                                    onClick={() => handleSelect("reports")}
                                     className={`mb-1 flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8 cursor-pointer ${
                                     selected === "reports"
                                         ? "bg-primary text-primary-foreground"
@@ -93,7 +86,7 @@ export default function NabvarA() {
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <div
-                                    onClick={() => handleNavigate("/admin/members", "members")}
+                                    onClick={() => handleSelect("members")}
                                     className={`mb-1 flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8 cursor-pointer ${
                                     selected === "members"
                                         ? "bg-primary text-primary-foreground"
@@ -116,7 +109,7 @@ export default function NabvarA() {
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <div
-                                    onClick={() => handleNavigate("/logout", "logout")}
+                                    onClick={() => navigate('/')}
                                     className="flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8 cursor-pointer"
                                 >
                                     <LogOut className="h-5 w-5" />

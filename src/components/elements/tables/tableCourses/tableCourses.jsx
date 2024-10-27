@@ -6,11 +6,11 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { data as initialData } from './data';
-import { columns } from './columns';
+import { columns as baseColumns } from './columns';
 import { ProgressBar } from '@/components/elements/progressBar';
 import { useNavigate } from "react-router-dom";
 
-export default function TableCourses() {
+export default function TableCourses({handleEditCourse}) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -25,6 +25,10 @@ export default function TableCourses() {
       setIsLoading(false); // Termina la carga
     }, 1500); // 2 segundos de espera para simular la llamada
   }, []);
+
+  const columns = baseColumns(handleEditCourse).map((column) => {
+    return column; // Aquí no necesitas más lógica
+  });
 
   const table = useReactTable({
     data,
@@ -57,7 +61,7 @@ export default function TableCourses() {
           className="mx-2 max-w-sm w-full sm:w-[90%] lg:w-[100%]"
         />
         <div className="flex">
-         <Button className="mr-2" onClick={() => navigate('/admin/add-course')}>
+         <Button className="mr-2" onClick={() => handleEditCourse()}>
             <p className="hidden md:block">+ Añadir curso</p>
             <p className=" md:hidden">+</p>
           </Button>

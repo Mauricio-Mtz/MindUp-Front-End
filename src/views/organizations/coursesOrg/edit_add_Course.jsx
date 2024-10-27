@@ -1,26 +1,41 @@
-import NabvarA from "@/components/elements/nabvarAside"
-import HeaderAdmin from "@/components/elements/headerAdmins";
-import { useLocation, useParams } from "react-router-dom";
-export default function EditCourse() {
-  const { name } = useParams();
-  const location = useLocation();
-  const courseId = location.state?.courseId;
+import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+
+export default function EditAddCourse({ course, title }) {
+  // Inicializa el estado. Si course no está definido, se establece un valor vacío.
+  const [courseName, setCourseName] = useState("");
+
+  useEffect(() => {
+    if (course) {
+      setCourseName(course.name || ""); // Verifica si se recibe un curso y actualiza el estado si es necesario
+      title("edit");
+    }else{
+      title("add");
+    }
+  }, [course]); // Este efecto se ejecuta cada vez que se recibe una nueva prop course
+
+  const handleChange = (e) => {
+    setCourseName(e.target.value); // Actualiza el estado con el valor del input
+  };
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <NabvarA/>
-      <HeaderAdmin/>
-      <div className="flex flex-col gap-2 py-1 pl-14">
-        <main className='sm:px-1 p-2 md:px-2 md:p-4 lg:p-4 lg:px-8 py-0'>
-          {name ? (
-            <h1>Hola {name}</h1>
-          ) : (
-            <div>
-              <h1>Hola</h1>
-            </div>
-          )}
-        </main>
+    <div>
+      <div className="w-full">
+        <Input
+          className="w-full sm:w-1/3"
+          placeholder="Nombre del curso"
+          value={courseName}
+          onChange={handleChange}
+        />
       </div>
+
+      {courseName !== "" ? ( // Verifica si courseName no está vacío
+        <h1>Hola {courseName}</h1>
+      ) : (
+        <div>
+          <h1>Hola</h1>
+        </div>
+      )}
     </div>
   );
 }

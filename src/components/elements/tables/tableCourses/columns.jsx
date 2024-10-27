@@ -4,7 +4,7 @@ import {DropdownMenu,DropdownMenuCheckboxItem,DropdownMenuContent,DropdownMenuIt
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
-export const columns = [
+export const columns = ( handleEditCourse ) => [
     {
       id: "select",
       header: ({ table }) => (
@@ -93,10 +93,8 @@ export const columns = [
         const curso = row.original;
         const navigate = useNavigate();
 
-        const handleEditCourse = (course) => {
-          navigate(`/admin/edit-course/${course.name}`, {
-            state: { courseId: course.id },
-          });
+        const handleButton = (course) => {
+          handleEditCourse(curso);
       };
 
         return (
@@ -112,7 +110,7 @@ export const columns = [
                 <DropdownMenuLabel> Acciones</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem> Ver detalles del curso</DropdownMenuItem>
-                <DropdownMenuItem onClick={() =>handleEditCourse(curso) }>Editar curso</DropdownMenuItem>
+                <DropdownMenuItem onClick={() =>handleButton(curso) }>Editar curso</DropdownMenuItem>
                 <DropdownMenuItem>Cambiar status</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
