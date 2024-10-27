@@ -1,7 +1,7 @@
 import { useLocation, useParams } from "react-router-dom";
-import Navbar from "../../components/elementos/navbar";
+import Navbar from "../../components/elements/navbar";
 import { useState, useEffect } from 'react';
-import { ProgressBar } from '@/components/elementos/progressBar';
+import { ProgressBar } from '@/components/elements/progressBar';
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
@@ -232,7 +232,7 @@ export default function CourseDetails() {
               
                 <h1 className="text-2xl font-bold">{content?.subTitle ?? null} 
                 </h1>
-                <p className="mt-4">{content?.text ?? null}</p>
+                <p className="mt-4 align-justify">{content?.text ?? null}</p>
 
               
                 {/* Renderiza el video */}

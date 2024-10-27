@@ -18,7 +18,7 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="bg-white dark:bg-[#1F1F1F] p-4 shadow-md mb-2 " style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.6)"}}>
+        <nav className="sticky top-0 z-30 static bg-white dark:bg-[#1F1F1F] p-4 shadow-md mb-2 " style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.6)"}}>
             <div className="container mx-auto flex justify-between items-center">
                 {/* Logo */}
                 <div className="text-white text-lg font-bold " onClick={() => navigate('/')}>

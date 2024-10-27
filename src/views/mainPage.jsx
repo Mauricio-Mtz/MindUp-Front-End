@@ -1,6 +1,6 @@
-import Navbar from '../components//elementos/navbar';
+import Navbar from '../components/elements/navbar';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import Carrusel from '../components//elementos/carrousel';
+import Carrusel from '../components/elements/carrousel';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
 
