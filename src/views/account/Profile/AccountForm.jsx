@@ -64,15 +64,33 @@ export function AccountForm({ userData, setUserData }) {
     
     const handleUpdateAccount = (e) => {
         e.preventDefault();
-    
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
         toast("¿Desea guardar los cambios?", {
             description: "Confirme para actualizar su información.",
             action: {
                 label: "Aceptar",
                 onClick: async () => {
                     if (isEditingEmail) {
+                        if (!emailRegex.test(formData.email)) {
+                            toast("Correo no aceptado", {
+                                description: "Por favor, coloque un correo válido.",
+                                dismissible: true,
+                                duration: 5000,
+                            });
+                            return false;
+                        }
                         await updateEmail();
                     } else if (isEditingPassword) {
+                        if (!passwordRegex.test(formData.password)) {
+                            toast("Contraseña no aceptada.", {
+                                description: "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una letra minúscula y un número.",
+                                dismissible: true,
+                                duration: 5000,
+                            });
+                            return false;
+                        }
                         await updatePassword();
                     }
                 },
@@ -124,7 +142,8 @@ export function AccountForm({ userData, setUserData }) {
                             value={isEditingPassword ? formData.password : "********"} // Mostrar "********" cuando no se edita
                             onChange={handleInputChange}
                             disabled={!isEditingPassword}
-                            className="w-full" 
+                            className="w-full"
+                            minLength={8}
                             required={isEditingPassword} // Solo es requerido si se está editando
                         />
                         <Button 

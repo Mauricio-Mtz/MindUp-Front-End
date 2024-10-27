@@ -4,18 +4,15 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import ComboContry from "@/components/elements/comboCountry";
 
 const SERVER = import.meta.env.VITE_API_URL;
 
 export function InformationForm({ userData, setUserData }) {
     const [formData, setFormData] = useState(userData);
     const [isEditing, setIsEditing] = useState(false);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
 
     const confirmUpdate = async () => {
         toast("¿Desea guardar los cambios?", {
@@ -60,7 +57,10 @@ export function InformationForm({ userData, setUserData }) {
                             type="text" 
                             name="fullname"
                             value={formData.fullname} 
-                            onChange={handleInputChange}
+                            onChange={(e) => {
+                                const { name, value } = e.target;
+                                setFormData({ ...formData, [name]: value });
+                            }}
                             disabled={!isEditing}
                             className="w-full" 
                             required 
@@ -74,7 +74,10 @@ export function InformationForm({ userData, setUserData }) {
                             type="date" 
                             name="birthdate"
                             value={formData.birthdate ? new Date(formData.birthdate).toISOString().split('T')[0] : ''}
-                            onChange={handleInputChange}
+                            onChange={(e) => {
+                                const { name, value } = e.target;
+                                setFormData({ ...formData, [name]: value });
+                            }}
                             disabled={!isEditing}
                             className="w-full" 
                             required 
@@ -84,28 +87,39 @@ export function InformationForm({ userData, setUserData }) {
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
                     <Label htmlFor="grado-estudios">Grado de estudios</Label>
                     <div className="w-full sm:w-3/4">
-                        <Input 
-                            type="text" 
-                            name="grade"
+                        <Select
+                            name={"grade"}
                             value={formData.grade} 
-                            onChange={handleInputChange}
+                            onValueChange={(value) => setFormData({ ...formData, grade: value })}
                             disabled={!isEditing}
                             className="w-full" 
                             required 
-                        />
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem value="none">Ninguno</SelectItem>
+                                    <SelectItem value="primaria">Primaria</SelectItem>
+                                    <SelectItem value="secundaria">Secundaria</SelectItem>
+                                    <SelectItem value="preparatoria">Preparatoria</SelectItem>
+                                    <SelectItem value="universidad">Universidad</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
                     <Label htmlFor="pais">País</Label>
                     <div className="w-full sm:w-3/4">
-                        <Input 
-                            type="text" 
+                        <ComboContry 
                             name="country"
-                            value={formData.country} 
-                            onChange={handleInputChange}
+                            value={formData.country}
+                            onChange={(value) => setFormData({ ...formData, country: value })}
                             disabled={!isEditing}
-                            className="w-full" 
-                            required 
+                            className="w-full"
+                            required
                         />
                     </div>
                 </div>
