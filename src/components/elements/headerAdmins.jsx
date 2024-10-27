@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button"
 import { Factory } from "lucide-react";
 import { useDarkMode } from '../../hooks/useDarkMode';
 import { Switch } from "@/components/ui/switch";
-export default function HeaderAdmin() {
+export default function HeaderAdmin({title}) {
     const [isDarkMode, toggleDarkMode] = useDarkMode();
 
     return (
         <>
             <nav className="sticky top-0 z-30 relative ml-12 static p-4 shadow-md mb-2  flex h-auto py-2  items-center justify-between gap-4 border-b bg-background px-4 sm:h-auto  px-6">
                 {/* Título a la izquierda */}
-                <h1 className="text-xl sm:text-3xl font-bold leading-none">Gestión de Cursos</h1>
+                <h1 className="text-xl sm:text-3xl font-bold leading-none">{title}</h1>
 
                 {/* Contenedor de los elementos alineados a la derecha */}
                 <div className="flex items-center gap-4">

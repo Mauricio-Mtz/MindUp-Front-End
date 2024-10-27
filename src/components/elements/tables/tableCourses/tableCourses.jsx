@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { data as initialData } from './data';
 import { columns } from './columns';
 import { ProgressBar } from '@/components/elements/progressBar';
+import { useNavigate } from "react-router-dom";
 
 export default function TableCourses() {
   const [sorting, setSorting] = useState([]);
@@ -16,7 +17,7 @@ export default function TableCourses() {
   const [rowSelection, setRowSelection] = useState({});
   const [data, setData] = useState([]); // Estado para almacenar los datos de la tabla
   const [isLoading, setIsLoading] = useState(true); // Estado de carga
-
+  const navigate = useNavigate();
   // Simulación de petición al servidor
   useEffect(() => {
     setTimeout(() => {
@@ -56,7 +57,7 @@ export default function TableCourses() {
           className="mx-2 max-w-sm w-full sm:w-[90%] lg:w-[100%]"
         />
         <div className="flex">
-         <Button className="mr-2">
+         <Button className="mr-2" onClick={() => navigate('/admin/add-course')}>
             <p className="hidden md:block">+ Añadir curso</p>
             <p className=" md:hidden">+</p>
           </Button>

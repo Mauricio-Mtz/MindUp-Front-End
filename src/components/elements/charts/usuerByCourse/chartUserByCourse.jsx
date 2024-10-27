@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { data } from "./data";
-import { ProgressBar } from '@/components/elements/progressBar';
+import { Skeleton } from "@/components/ui/skeleton"
 
 const BarChartComponent = () => {
   const [primaryColor, setPrimaryColor] = useState('hsl(221, 83%, 53%)');
@@ -34,12 +34,16 @@ const BarChartComponent = () => {
         </CardHeader>
         <CardContent className="p-0 pb-4">
           {loading ? (
-            // Mostrar barra de progreso mientras los datos están cargando
-            <div className="my-8 flex flex-col items-center justify-center w-full">
-              <div className="w-[60%]">
-                <ProgressBar />
+            // Mostrar barra de progreso mientras los datos están cargando           
+            <div className="w-full flex align-center justify-center">
+              <div className="gap-6 flex mr-30 h-[200px] py-5">
+                <Skeleton className="w-[40px] h-full" />                  
+                <Skeleton className="w-[40px] h-full" />                  
+                <Skeleton className="w-[40px] h-full" />                  
+                <Skeleton className="w-[40px] h-full" />                                                      
+                <Skeleton className="w-[40px] h-full" />                                                      
               </div>
-            </div>
+            </div>          
           ) : (
             // Mostrar gráfico cuando los datos se han cargado
             <ResponsiveContainer width="100%" height={200}>

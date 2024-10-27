@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { data } from "./data";
-import { ProgressBar } from '@/components/elements/progressBar';
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function AverageFinishedCourses() {
   const [primaryColor, setPrimaryColor] = useState('hsl(221, 83%, 53%)');
@@ -28,9 +28,13 @@ export default function AverageFinishedCourses() {
       </CardHeader>
       <CardContent className="p-0 pb-4">
         {loading ? (
-          <div className="my-8 flex flex-col items-center justify-center w-full">
-            <div className="w-[60%]">
-              <ProgressBar />
+          <div className="w-full flex align-center justify-center">
+            <div className="gap-6 flex mr-30 h-[200px] py-5">
+              <Skeleton className="w-[40px] h-full" />                  
+              <Skeleton className="w-[40px] h-full" />                  
+              <Skeleton className="w-[40px] h-full" />                  
+              <Skeleton className="w-[40px] h-full" />                                                      
+              <Skeleton className="w-[40px] h-full" />                                                      
             </div>
           </div>
         ) : (

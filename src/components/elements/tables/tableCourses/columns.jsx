@@ -2,6 +2,7 @@ import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {DropdownMenu,DropdownMenuCheckboxItem,DropdownMenuContent,DropdownMenuItem,DropdownMenuLabel,DropdownMenuSeparator,DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export const columns = [
     {
@@ -90,7 +91,14 @@ export const columns = [
       ),
       cell: ({ row }) => {
         const curso = row.original;
-  
+        const navigate = useNavigate();
+
+        const handleEditCourse = (course) => {
+          navigate(`/admin/edit-course/${course.name}`, {
+            state: { courseId: course.id },
+          });
+      };
+
         return (
           <div className="flex justify-center alint-center">
             <DropdownMenu>
@@ -101,10 +109,10 @@ export const columns = [
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                <DropdownMenuLabel> Acciones</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Ver detalles del curso</DropdownMenuItem>
-                <DropdownMenuItem>Editar curso</DropdownMenuItem>
+                <DropdownMenuItem> Ver detalles del curso</DropdownMenuItem>
+                <DropdownMenuItem onClick={() =>handleEditCourse(curso) }>Editar curso</DropdownMenuItem>
                 <DropdownMenuItem>Cambiar status</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
