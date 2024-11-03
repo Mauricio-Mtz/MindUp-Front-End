@@ -194,7 +194,7 @@ export default function CourseDetails() {
                       onClick={ () => setModule(index)}
                     >
                       {/* Circulito fijo, sin deformarse */}
-                      <div className="w-4 h-4 bg-gray-500 rounded-full flex-shrink-0"></div>
+                      <div className={`w-4 h-4  ${module === index ? "bg-primary":"bg-gray-500"} rounded-full flex-shrink-0`}></div>
                       <span >{course.name}</span>
                     </button>
                   ))

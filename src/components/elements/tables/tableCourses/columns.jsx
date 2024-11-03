@@ -94,8 +94,9 @@ export const columns = ( handleEditCourse ) => [
         const navigate = useNavigate();
 
         const handleButton = (course) => {
-          handleEditCourse(curso);
-      };
+          console.log("Curso seleccionado:", course);
+          navigate(`/admin/edit/${course.name}`, { state: { course } });          
+        };
 
         return (
           <div className="flex justify-center alint-center">

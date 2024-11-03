@@ -49,6 +49,12 @@ export default function TableCourses({handleEditCourse}) {
     },
   });
 
+  const handleEditAddCourse = () => {
+    const course = null;
+    
+    navigate('/admin/add', { state: { course } });
+  };
+
   return (
     <div className="w-full overflow-x-auto">
       <div className="flex items-center justify-between py-4 gap-4">
@@ -61,7 +67,7 @@ export default function TableCourses({handleEditCourse}) {
           className="mx-2 max-w-sm w-full sm:w-[90%] lg:w-[100%]"
         />
         <div className="flex">
-         <Button className="mr-2" onClick={() => handleEditCourse()}>
+         <Button className="mr-2" onClick={handleEditAddCourse}>
             <p className="hidden md:block">+ Añadir curso</p>
             <p className=" md:hidden">+</p>
           </Button>
