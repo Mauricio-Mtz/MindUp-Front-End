@@ -23,16 +23,14 @@ export default function EditAddCourse() {
   const location = useLocation();
   const { course } = location.state || {}; // Accede a los datos del estado
 
-  useEffect(() => {
-    setTimeout(() => {
-      setData(simData); // Simula la respuesta del servidor
-    }, 1500); // 1.5 segundos de espera para simular la llamada
-  }, []);
 
   useEffect(() => {
     console.log("course:", course);
     if (course) {
       setCourseName(course.name || ""); // Verifica si se recibe un curso y actualiza el estado si es necesario
+      setTimeout(() => {
+        setData(simData); // Simula la respuesta del servidor
+      }, 1500); // 1.5 segundos de espera para simular la llamada
     }
   }, [course]); // Este efecto se ejecuta cada vez que se recibe una nueva prop course
 
@@ -91,23 +89,33 @@ export default function EditAddCourse() {
                 
                   <div className="flex flex-col w-full space-y-2">
                     <Label htmlFor="option" className="">Opciones</Label>
-
-                    <div className="w-full flex items-center justify-center">
-                      <Input className="w-full" placeholder="Opción 1" id="option" value={question ? (question.options ? question.options[0] : "") : ""} onChange={(e) => setQuestion({...question, options: [e.target.value, question?.options?.[1], question?.options?.[2], question?.options?.[3]]})}/>
-                      <Checkbox id="option" className="ml-2 h-full p-0 aspect-square" checked={question ? (question.correctAnswer || question.correctAnswer == 0 ? question.correctAnswer : 5 ) == 0 : false} onChange={(e) => setQuestion({...question, correctAnswer: e.target.checked ? 0 : 5})}/>
-                    </div>
-                    <div className="w-full flex items-center justify-center">
-                      <Input className="w-full" placeholder="Opción 2" id="option" value={question ? (question.options  ? question.options[1] : "") : ""} onChange={(e) => setQuestion({...question, options: [question?.options?.[0], e.target.value, question?.options?.[2], question?.options?.[3]]})}/>
-                      <Checkbox id="option" className="ml-2 h-full p-0 aspect-square" checked={question ? (question.correctAnswer ? question.correctAnswer : 5 ) == 1 : false} onChange={(e) => setQuestion({...question, correctAnswer: e.target.checked ? 1 : 5})}/>
-                    </div>
-                    <div className="w-full flex items-center justify-center">
-                      <Input className="w-full" placeholder="Opción 3" id="option" value={question ? (question.options  ? question.options[2] : "") : ""} onChange={(e) => setQuestion({...question, options: [question?.options?.[0], question?.options?.[1], e.target.value, question?.options?.[3]]})}/>
-                      <Checkbox id="option" className="ml-2 h-full p-0 aspect-square" checked={question ? (question.correctAnswer ? question.correctAnswer : 5 ) == 2 : false} onChange={(e) => setQuestion({...question, correctAnswer: e.target.checked ? 2 : 5})}/>
-                    </div>
-                    <div className="w-full flex items-center justify-center">
-                      <Input className="w-full" placeholder="Opción 4" id="option" value={question ? (question.options  ? question.options[3] : "") : ""} onChange={(e) => setQuestion({...question, options: [question?.options?.[0], question?.options?.[1], question?.options?.[2], e.target.value]})}/>
-                      <Checkbox id="option" className="ml-2 h-full p-0 aspect-square" checked={question ? (question.correctAnswer ? question.correctAnswer : 5 ) == 3 : false} onChange={(e) => setQuestion({...question, correctAnswer: e.target.checked ? 3 : 5})} />
-                    </div>
+                    {[0, 1, 2, 3].map((index) => (
+                      <div key={index} className="w-full flex items-center justify-center">
+                        <Input
+                          className="w-full"
+                          placeholder={`Opción ${index + 1}`}
+                          id={`option${index}`}
+                          value={question ? (question.options ? question.options[index] : "") : ""}
+                          onChange={(e) =>
+                            setQuestion({
+                              ...question,
+                              options: question.options.map((opt, i) => (i === index ? e.target.value : opt)),
+                            })
+                          }
+                        />
+                        <Checkbox
+                          id={`checkbox${index}`}
+                          className="ml-2 h-full p-0 aspect-square"
+                          checked={question ? question.correctAnswer === index : false}
+                          onChange={(e) =>
+                            setQuestion({
+                              ...question,
+                              correctAnswer: e.target.checked ? index : null,
+                            })
+                          }
+                        />
+                      </div>
+                    ))}
                   </div>
 
               </form>

@@ -112,7 +112,7 @@ export const data = [
         {
           id: "q7",
           question: "¿Qué es uno de los mayores desafíos para las plataformas digitales?",
-          options: ["Privacidad de datos", "Facilidad de uso", "Accesibilidad", "Capacidad de almacenamiento"],
+          options: ["Privacidad de datos", "Facilidad de uso", "Accesibilidad"],
           correctAnswer: 0
         }
       ]
