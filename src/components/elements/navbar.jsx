@@ -44,7 +44,7 @@ export default function Navbar() {
                             <DropdownMenuGroup>
                                 <DropdownMenuItem onClick={() => {navigate('/profile')}}>Perfil</DropdownMenuItem>
                                 <DropdownMenuItem>Mis Cursos</DropdownMenuItem>
-                                <DropdownMenuItem>Pagos</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => {navigate('/pay')}}>Pagos</DropdownMenuItem>
                             </DropdownMenuGroup>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>Log out</DropdownMenuItem>
