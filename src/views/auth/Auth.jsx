@@ -45,6 +45,7 @@ export default function Auth() {
     })
     .then(response => response.json())
     .then(userData => {
+      console.log(userData)
         setAlertData({
             type: userData.success,
             description: userData.message
@@ -54,7 +55,7 @@ export default function Auth() {
           // Guarda los datos del usuario en localStorage
           localStorage.setItem('user', JSON.stringify(userData.data));
           // Redirige al usuario
-          navigate('/courses');
+          navigate('/catalog');
         }
         setLoading(false);
     })
@@ -116,7 +117,7 @@ export default function Auth() {
       });
       if (userData.success) {
         localStorage.setItem('user', JSON.stringify(userData.data));
-        navigate('/courses');
+        navigate('/catalog');
       }
       setLoading(false);
     })
