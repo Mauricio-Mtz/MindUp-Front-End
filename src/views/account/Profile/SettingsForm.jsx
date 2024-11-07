@@ -7,7 +7,7 @@ export function SettingsForm() {
     const [isDarkMode, toggleDarkMode] = useDarkMode();
 
     return (
-        <div className="flex flex-col gap-2 mt-2 p-2 border rounded-md mb-2">
+        <div className="flex flex-col gap-2 mt-2 p-4 border rounded-md mb-2">
             <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">Configuración</h2>
             <div className="space-y-2">
                 <div className="flex text-left sm:flex-row justify-between items-center gap-2">

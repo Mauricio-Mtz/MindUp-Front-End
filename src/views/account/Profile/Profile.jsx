@@ -1,7 +1,6 @@
-// UserProfile.js
 import { useState, useEffect } from 'react';
 import { ProgressCircle } from '@/components/elements/progressCircle';
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { AccountForm } from './AccountForm';
 import { InformationForm } from './InformationForm';
 import { SettingsForm } from './SettingsForm';

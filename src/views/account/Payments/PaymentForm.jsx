@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-// AccountForm.js
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,10 +7,9 @@ import { toast } from "sonner";
 
 const SERVER = import.meta.env.VITE_API_URL;
 
-export function AccountForm({ userData, setUserData }) {
-    const [formData, setFormData] = useState({ ...userData, password: "" }); // Inicia password como cadena vacía
-    const [isEditingEmail, setIsEditingEmail] = useState(false);
-    const [isEditingPassword, setIsEditingPassword] = useState(false);
+export function PaymentForm({ paymentData, setPaymentData }) {
+    const [formData, setFormData] = useState({ ...paymentData, password: "" });
+    const [isEditing, setIsEditing] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -25,84 +23,55 @@ export function AccountForm({ userData, setUserData }) {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    email: userData.email, // Email actual
-                    newEmail: formData.email, // Nuevo email
+                    email: paymentData.email,
+                    newEmail: formData.email.trim(),
                 }),
             });
-    
+
             if (response.ok) {
-                setUserData({ ...userData, email: formData.email });
-                setIsEditingEmail(false);
-    
-                // Solo actualizar el email en el objeto user y guardarlo en localStorage
+                setPaymentData({ ...paymentData, email: formData.email });
+                setIsEditing(false);
                 const updatedUser = { ...user, email: formData.email };
                 localStorage.setItem('user', JSON.stringify(updatedUser));
+            } else {
+                toast.error("Error al actualizar el correo.");
             }
         } catch (error) {
             console.error("Error updating email:", error);
+            toast.error("No se pudo actualizar el correo.");
         }
     };
-    
-    const updatePassword = async () => {
-        try {
-            const response = await fetch(`${SERVER}/users/updatePassword`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: userData.email, // Email actual para identificación
-                    newPassword: formData.password, // Nueva contraseña
-                }),
-            });
-            if (response.ok) {
-                setFormData({ ...formData, password: "" });
-                setIsEditingPassword(false);
-            }
-        } catch (error) {
-            console.error("Error updating password:", error);
-        }
-    };
-    
-    const handleUpdateAccount = (e) => {
+
+    const handleUpdatePayment = (e) => {
         e.preventDefault();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
         toast("¿Desea guardar los cambios?", {
             description: "Confirme para actualizar su información.",
             action: {
                 label: "Aceptar",
                 onClick: async () => {
-                    if (isEditingEmail) {
-                        if (!emailRegex.test(formData.email)) {
+                    if (isEditing) {
+                        if (!emailRegex.test(formData.email.trim())) {
                             toast("Correo no aceptado", {
                                 description: "Por favor, coloque un correo válido.",
                                 dismissible: true,
                                 duration: 5000,
                             });
-                            return false;
+                            return;
                         }
                         await updateEmail();
-                    } else if (isEditingPassword) {
-                        if (!passwordRegex.test(formData.password)) {
-                            toast("Contraseña no aceptada.", {
-                                description: "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una letra minúscula y un número.",
-                                dismissible: true,
-                                duration: 5000,
-                            });
-                            return false;
-                        }
-                        await updatePassword();
                     }
                 },
             },
             dismissible: true,
             duration: 5000,
         });
-    };    
+    };
 
     return (
-        <form onSubmit={handleUpdateAccount} className="flex flex-col gap-2 mt-2 p-4 border rounded-md">
-            <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">Cuenta</h2>
+        <form onSubmit={handleUpdatePayment} className="flex flex-col gap-2 mt-2 p-4 border rounded-md">
+            <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">Metodo de pago</h2>
             <div className="space-y-2">
                 {/* Sección de edición de correo */}
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
@@ -113,7 +82,7 @@ export function AccountForm({ userData, setUserData }) {
                             name="email"
                             value={formData.email} 
                             onChange={handleInputChange}
-                            disabled={!isEditingEmail}
+                            disabled={!isEditing}
                             className="w-full" 
                             required 
                         />
@@ -121,12 +90,11 @@ export function AccountForm({ userData, setUserData }) {
                             type="button" 
                             className="ml-2 bg-gray-500 text-white w-28"
                             onClick={() => {
-                                setIsEditingEmail(!isEditingEmail);
-                                setIsEditingPassword(false); // Deshabilita la edición de contraseña
-                                if (!isEditingEmail) setFormData(userData); // Restablecer email al cancelar edición
+                                setIsEditing(!isEditing);
+                                if (!isEditing) setFormData(paymentData);
                             }}
                         >
-                            {isEditingEmail ? 'Cancelar' : 'Editar'}
+                            {isEditing ? 'Cancelar' : 'Editar'}
                         </Button>
                     </div>
                 </div>
@@ -139,23 +107,22 @@ export function AccountForm({ userData, setUserData }) {
                             type="password" 
                             name="password"
                             placeholder="Nueva contraseña"
-                            value={isEditingPassword ? formData.password : "********"} // Mostrar "********" cuando no se edita
+                            value={isEditing ? formData.password : "********"}
                             onChange={handleInputChange}
-                            disabled={!isEditingPassword}
+                            disabled={!isEditing}
                             className="w-full"
                             minLength={8}
-                            required={isEditingPassword} // Solo es requerido si se está editando
+                            required={isEditing}
                         />
                         <Button 
                             type="button" 
                             className="ml-2 bg-gray-500 text-white w-28"
                             onClick={() => {
-                                setIsEditingPassword(!isEditingPassword);
-                                setIsEditingEmail(false); // Deshabilita la edición de correo
-                                if (!isEditingPassword) setFormData({ ...formData, password: "" }); // Restablecer password al cancelar edición
+                                setIsEditing(!isEditing);
+                                if (!isEditing) setFormData({ ...formData, password: "" });
                             }}
                         >
-                            {isEditingPassword ? 'Cancelar' : 'Editar'}
+                            {isEditing ? 'Cancelar' : 'Editar'}
                         </Button>
                     </div>
                 </div>
@@ -163,7 +130,7 @@ export function AccountForm({ userData, setUserData }) {
 
             {/* Botón de Guardar Cambios */}
             <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-2 justify-end w-full">
-                {(isEditingEmail || isEditingPassword) && (
+                {(isEditing) && (
                     <Button type="submit" className="w-full md:w-32 bg-green-500 text-white">
                         Guardar Cambios
                     </Button>
