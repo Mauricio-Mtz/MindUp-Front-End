@@ -8,7 +8,7 @@ import MyCourses from './views/myCourses/MyCourses.jsx';
 
 function App() {
   return (
-    <Router> 
+    <Router>
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/auth" element={<Auth />} />

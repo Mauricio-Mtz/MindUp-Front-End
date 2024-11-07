@@ -47,7 +47,7 @@ export function InformationForm({ userData, setUserData }) {
     };
     
     return (
-        <form onSubmit={(e) => { e.preventDefault(); confirmUpdate(); }} className="flex flex-col gap-2 mt-2 p-2 border rounded-md">
+        <form onSubmit={(e) => { e.preventDefault(); confirmUpdate(); }} className="flex flex-col gap-2 mt-2 p-4 border rounded-md">
             <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">Información de usuario</h2>
             <div className="space-y-2">
                 <div className="flex text-left flex-col sm:flex-row justify-between items-center gap-2">
