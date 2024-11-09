@@ -37,6 +37,11 @@
     --input: 221.2 20% 50%;
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
+    --chart-1: 210 85% 50%;   /* Azul brillante que armoniza con el `--primary` */
+    --chart-2: 160 72% 45%;   /* Verde suave para contraste */
+    --chart-3: 45 90% 60%;    /* Amarillo cálido que destaca */
+    --chart-4: 300 75% 65%;   /* Rosa vibrante para diversidad */
+    --chart-5: 350 80% 60%;   /* Rojo suave para un toque de calidez */
     .show-scrollbar::-webkit-scrollbar-thumb {
       background-color: rgba(
         0,
@@ -46,6 +51,7 @@
       ) !important; /* Color de la parte deslizante */
       border-radius: 10px !important; /* Esquinas redondeadas */
     }
+    
   }
   .dark {
     --background: 221.2 10% 10%;
@@ -68,6 +74,11 @@
     --input: 221.2 20% 50%;
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
+    --chart-1: 220 70% 50%;   /* Azul profundo que va bien con el tema oscuro */
+    --chart-2: 160 60% 45%;   /* Verde apagado que sigue siendo legible */
+    --chart-3: 40 80% 55%;    /* Amarillo oscuro que resalta en fondo oscuro */
+    --chart-4: 280 65% 60%;   /* Púrpura que complementa el ambiente oscuro */
+    --chart-5: 340 75% 55%;   /* Rojo oscuro para un contraste adicional */
     .show-scrollbar::-webkit-scrollbar-thumb {
       background-color: rgba(
         255,
