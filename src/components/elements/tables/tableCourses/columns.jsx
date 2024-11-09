@@ -4,7 +4,7 @@ import {DropdownMenu,DropdownMenuCheckboxItem,DropdownMenuContent,DropdownMenuIt
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
-export const columns = ( handleEditCourse ) => [
+export const columns = (  ) => [
     {
       id: "select",
       header: ({ table }) => (
