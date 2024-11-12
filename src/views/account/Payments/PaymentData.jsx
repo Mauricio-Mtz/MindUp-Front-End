@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 export function PaymentData({ paymentData }) {
-    console.log("Payment data ", paymentData);
 
     // Convertir fechas a un formato legible
     const formatDate = (dateString) => {

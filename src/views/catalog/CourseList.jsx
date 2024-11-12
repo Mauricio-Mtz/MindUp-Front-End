@@ -86,7 +86,7 @@ export default function CourseList() {
                     <Card key={course.id} className="w-full max-w-full h-[450px] flex flex-col justify-between mx-auto">
                         <CardHeader>
                             <CardTitle>{course.name}</CardTitle>
-                            <CardDescription>Añadido por: <b>{course.addedBy}</b></CardDescription>
+                            <CardDescription><b>{course.organization}</b></CardDescription>
                         </CardHeader>
                         <CardContent className="flex-grow flex items-center justify-center">
                             <div className="flex flex-col items-center justify-between h-full">

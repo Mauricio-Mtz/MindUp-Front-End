@@ -63,7 +63,9 @@ export default function Profile() {
                             <SettingsForm />
                         </ScrollArea>
                     </div>
-                    <RecommendedCourses recommendedCourses={recommendedCourses} />
+                    {recommendedCourses.length > 0 && (
+                        <RecommendedCourses recommendedCourses={recommendedCourses} />
+                    )}
                 </div>
             )}
         </>
