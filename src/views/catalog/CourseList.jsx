@@ -14,14 +14,14 @@ export default function CourseList() {
     const [loading, setLoading] = useState(false);
     const [courses, setCourses] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const coursesPerPage = 8; // Número de cursos por página
+    const coursesPerPage = 8;
+    const user = JSON.parse(localStorage.getItem('user'));
 
-    // Simula la petición a un servidor para obtener los cursos
     useEffect(() => {
         setLoading(true);
         const fetchCourses = async () => {
             try {
-                const response = await fetch(`${SERVER}/courses/getAllCourses`, {
+                const response = await fetch(`${SERVER}/courses/getCatalog?email=${user.email}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
