@@ -66,7 +66,7 @@ export function PreferencesForm({ userData, setUserData }) {
         setIsEditing(false);
         setFormData(userData); // Reset the form to user data when canceled
     };
-
+    
     return (
         <form onSubmit={handleUpdateAccount} className="flex flex-col gap-2 mt-2 p-4 border rounded-md">
             <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">Preferencias del usuario</h2>
@@ -76,7 +76,7 @@ export function PreferencesForm({ userData, setUserData }) {
                     <div className="w-full sm:w-3/4 flex">
                         <Categories 
                             setSelectedCategories={handleSelectedCategories} 
-                            initialSelectedCategories={formData.preferences} // Categorías iniciales
+                            initialSelectedCategories={formData.preferences || []} // Categorías iniciales
                             fetchGeneralCategories={isEditing} // Hacer fetch si estamos en modo edición
                         />
                     </div>

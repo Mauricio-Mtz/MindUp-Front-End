@@ -40,7 +40,6 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData, registerType }) =
 
     // Función para actualizar las categorías seleccionadas
     const handleSelectedCategories = (categories) => {
-        console.log(categories)
         setRegisterData({ ...registerData, preferences: categories });
     };    
 
@@ -121,7 +120,7 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData, registerType }) =
             </CardHeader>
             <CardContent className="flex flex-col h-full">
                 <form onSubmit={handleRegisterSubmit} className="flex flex-col h-full">
-                    <div className="space-y-2 overflow-y-auto max-h-[321px] mb-4 border-y-2 rounded-md">
+                    <div className="space-y-2 overflow-y-auto max-h-[321px] mb-4 border-y-2 rounded-md pb-2">
                         {registerType === "google" && (
                         <div className="space-y-1">
                             <Label htmlFor="password">Contraseña</Label>
@@ -163,8 +162,10 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData, registerType }) =
                             </div>
                             <div className='space-y-1'>
                                 <Label htmlFor="password">Selecciona tus preferencias (Opcional)</Label>
-                                <Categories
-                                    setSelectedCategories={handleSelectedCategories}
+                                <Categories 
+                                    setSelectedCategories={handleSelectedCategories} 
+                                    initialSelectedCategories={[]} // Categorías iniciales
+                                    fetchGeneralCategories={true} // Hacer fetch si estamos en modo edición
                                 />
                             </div>
                         </>

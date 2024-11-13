@@ -10,7 +10,7 @@ import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 const SERVER = import.meta.env.VITE_API_URL;
 
 export const PaymentMethod = ({ onPay }) => {
-    const [paymentMethod, setPaymentMethod] = useState("mercadopago");
+    const [paymentMethod, setPaymentMethod] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [preferenceId, setPreferenceId] = useState(null);
     const user = JSON.parse(localStorage.getItem('user'));

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
@@ -20,7 +21,7 @@ export const Categories = ({ setSelectedCategories, initialSelectedCategories = 
         if (fetchGeneralCategories) {
             const fetchCategories = async () => {
                 try {
-                    const response = await fetch(`${SERVER}/courses/getCategories`, { method: 'GET' });
+                    const response = await fetch(`${SERVER}/content/getCategories`, { method: 'GET' });
                     const categoriesData = await response.json();
 
                     if (categoriesData.data && categoriesData.data.length > 0) {
