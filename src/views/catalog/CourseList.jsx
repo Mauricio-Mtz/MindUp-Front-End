@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react';import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ProgressCircle } from '@/components/elements/progressCircle';
 import { Button } from "@/components/ui/button";
@@ -16,12 +17,18 @@ export default function CourseList() {
     const [currentPage, setCurrentPage] = useState(1);
     const coursesPerPage = 8;
     const user = JSON.parse(localStorage.getItem('user'));
-
+    
     useEffect(() => {
         setLoading(true);
+    
         const fetchCourses = async () => {
             try {
-                const response = await fetch(`${SERVER}/courses/getCatalog?email=${user.email}`, {
+                // Verificar si user.preferences contiene algún valor
+                const endpoint = user.preferences && user.preferences.length > 0 
+                    ? `${SERVER}/content/getCatalog?email=${user.email}`
+                    : `${SERVER}/content/getAllCourses`;
+    
+                const response = await fetch(endpoint, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -48,7 +55,7 @@ export default function CourseList() {
         };
     
         fetchCourses();
-    }, []);
+    }, []);    
 
     // Calcular los índices de los cursos a mostrar
     const indexOfLastCourse = currentPage * coursesPerPage;

@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ComboContry from "@/components/elements/comboCountry";
+import { Categories } from "@/components/elements/Categories";
 
 export const RegisterData = ({ onRegisterSubmit, setAlertData, registerType }) => {
     // Estados para almacenar los valores de los inputs de register
@@ -23,6 +24,7 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData, registerType }) =
         rfc: "",
         fiscalAddress: "",
         fiscalRegime: "",
+        preferences: []
     });
 
     // Función para manejar los cambios en los inputs de register
@@ -35,6 +37,12 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData, registerType }) =
     const handleCountryChange = (value) => {
         setRegisterData({ ...registerData, country: value });
     };
+
+    // Función para actualizar las categorías seleccionadas
+    const handleSelectedCategories = (categories) => {
+        console.log(categories)
+        setRegisterData({ ...registerData, preferences: categories });
+    };    
 
     // Validación general del formulario
     const validateRegister = () => {
@@ -152,6 +160,12 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData, registerType }) =
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
+                            </div>
+                            <div className='space-y-1'>
+                                <Label htmlFor="password">Selecciona tus preferencias (Opcional)</Label>
+                                <Categories
+                                    setSelectedCategories={handleSelectedCategories}
+                                />
                             </div>
                         </>
                         )}

@@ -24,7 +24,7 @@ export default function Course() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`${SERVER}/courses/getCourse/${initialCourse.id}`);
+        const response = await fetch(`${SERVER}/content/getCourse/${initialCourse.id}`);
         const result = await response.json();
 
         if (result.success) {
