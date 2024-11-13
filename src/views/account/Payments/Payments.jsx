@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Suspense } from 'react';
 import { ProgressCircle } from '@/components/elements/progressCircle';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
@@ -14,7 +13,7 @@ const SERVER = import.meta.env.VITE_API_URL;
 export default function Payments() {
     const suscriptionData = {
         description: "Suscripción Mensual",
-        amount: 12.09,
+        amount: 120.00,
         currency: "MXN",
         billingCycle: "Mensual",
         renewalType: "Manual",
@@ -91,12 +90,12 @@ export default function Payments() {
                                 <>
                                     {selectedPayment && <PaymentData paymentData={selectedPayment} />}
                                     {/* Mostrar PaymentMethod si el pago está a punto de expirar */}
-                                    {selectedPayment && isCloseToExpiration(selectedPayment.end_date) && <PaymentMethod onPay={handlePay} />}
+                                    {selectedPayment && isCloseToExpiration(selectedPayment.end_date) && <PaymentMethod onPay={handlePay} suscription={suscriptionData} />}
                                 </>
                             ) : (
                                 <>
                                     <Subscription subscription={suscriptionData} />
-                                    <PaymentMethod onPay={handlePay} />
+                                    <PaymentMethod onPay={handlePay} suscription={suscriptionData} />
                                 </>
                             )}
                         </div>
