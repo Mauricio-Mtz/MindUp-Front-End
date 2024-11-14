@@ -9,8 +9,8 @@ import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 
 const SERVER = import.meta.env.VITE_API_URL;
 
-export const PaymentMethod = ({ onPay }) => {
-    const [paymentMethod, setPaymentMethod] = useState("mercadopago");
+export const PaymentMethod = ({ onPay, suscription }) => {
+    const [paymentMethod, setPaymentMethod] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [preferenceId, setPreferenceId] = useState(null);
     const user = JSON.parse(localStorage.getItem('user'));
@@ -54,7 +54,7 @@ export const PaymentMethod = ({ onPay }) => {
                 body: JSON.stringify({ 
                     orderId, 
                     studentEmail: user.email,
-                    amount: 1.00
+                    amount: suscription.amount // Usar el monto de la suscripción
                 })
             });
 
@@ -73,7 +73,11 @@ export const PaymentMethod = ({ onPay }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     studentEmail: user.email,
-                    items: [{ title: 'Suscripción MindUp', quantity: 1, unit_price: 100.0 }]
+                    items: [{
+                        title: suscription.description, // Usar descripción de la suscripción
+                        quantity: 1,
+                        unit_price: suscription.amount // Usar monto de la suscripción
+                    }]
                 }),
             });
             const data = await response.json();
@@ -112,12 +116,12 @@ export const PaymentMethod = ({ onPay }) => {
                     {paymentMethod === "paypal" && (
                         <PayPalScriptProvider options={{
                             clientId: "Adg2w8GVLBfeD8yfOpHi_EVcEVhtJxDVtM4PH7Zj6nsePkUyzLSmFGr2VBp2yQh6-CmaggA3jjuOUhsj",
-                            currency: "MXN"
+                            currency: suscription.currency // Usar moneda de la suscripción
                         }}>
                             <PayPalButtons 
                                 style={{ shape: "rect", layout: "vertical" }}
                                 createOrder={async () => {
-                                    const { orderId } = await createOrder(10.00, "MXN");
+                                    const { orderId } = await createOrder(suscription.amount, suscription.currency); // Usar valores de la suscripción
                                     return orderId;
                                 }}
                                 onApprove={async (data) => {

@@ -1,10 +1,22 @@
 /* eslint-disable react/prop-types */
 export function PaymentData({ paymentData }) {
-
+    
     // Convertir fechas a un formato legible
     const formatDate = (dateString) => {
+        const date = new Date(dateString);
+    
+        // Crear una fecha nueva sin la conversión automática de zona horaria
+        const year = date.getUTCFullYear();
+        const month = date.getUTCMonth(); // Los meses empiezan desde 0 (enero = 0)
+        const day = date.getUTCDate();
+    
+        // Usar el mes y día en formato legible
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
+        
+        // Crear una nueva fecha usando estos valores para evitar el desfase
+        const localDate = new Date(year, month, day);
+        
+        return localDate.toLocaleDateString(undefined, options);
     };
 
     // Estilo condicional para suscripciones actuales

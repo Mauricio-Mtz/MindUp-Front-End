@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from '../../components/elements/navbar';
 import CourseList from './CourseList';
 import Course from './Course';
-import Module from './Module';
+import Module from './Module/Module';
 
 export default function MyCourses() {
     return (
