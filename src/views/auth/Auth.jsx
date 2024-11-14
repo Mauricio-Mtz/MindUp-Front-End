@@ -55,7 +55,11 @@ export default function Auth() {
           // Guarda los datos del usuario en localStorage
           localStorage.setItem('user', JSON.stringify(userData.data));
           // Redirige al usuario
-          navigate('/catalog');
+          if(userData.data.type == 'member' || userData.data.type == 'organization'){
+            navigate('/admin');
+          }else if(userData.data.type == 'student'){
+            navigate('/catalog');
+          }
         }
         setLoading(false);
     })
@@ -117,7 +121,11 @@ export default function Auth() {
         description: response.message
       });
       if (response.success) {
-        navigate('/catalog');
+        if(response.type == 'member' || response.type == 'organization'){
+          navigate('/admin');
+        }else if(response.type == 'student'){
+          navigate('/catalog');
+        }
       }
       setLoading(false);
     })
