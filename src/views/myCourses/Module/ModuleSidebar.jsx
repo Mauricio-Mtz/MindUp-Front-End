@@ -1,10 +1,14 @@
 /* eslint-disable react/prop-types */
+import { useNavigate } from "react-router-dom";
+import { FaArrowLeft } from 'react-icons/fa';
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-export function ModuleSidebar({ modules, setModule }) {
+export function ModuleSidebar({ modules, setModule, course }) {
+  console.log(course)
+  const navigate = useNavigate();
 
   return (
     <div className="absolute">
@@ -25,7 +29,10 @@ export function ModuleSidebar({ modules, setModule }) {
         </SheetTrigger>
         <SheetContent side="left" className="max-w-md overflow-y-scroll scrollbar-hide">
           <SheetHeader>
-            <SheetTitle>Módulos disponibles</SheetTitle>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" onClick={() => navigate(`/my-courses/course/${course.name}`, { state: { course } })} ><FaArrowLeft/></Button>
+              <SheetTitle>Curso de {course.name}</SheetTitle>
+            </div>
             <SheetDescription>Módulos del curso: <b>{name}</b></SheetDescription>
           </SheetHeader>
           <div className="grid gap-4 py-4">

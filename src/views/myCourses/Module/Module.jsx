@@ -33,7 +33,7 @@ export default function Module() {
 
   return (
     <>
-      <ModuleSidebar modules={course.modules} setModule={setModuleId} />
+      <ModuleSidebar modules={course.modules} setModule={setModuleId} course={course} />
       <div className="px-16 mb-10">
         {content ? (
           <ModuleContent content={content} questions={quiz.questions} />
