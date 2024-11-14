@@ -105,7 +105,10 @@ export default function NabvarA() {
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <div
-                                onClick={() => navigate('/')}
+                                onClick={() => {
+                                    localStorage.removeItem('user');
+                                    navigate('/');
+                                }}
                                 className="flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8 cursor-pointer"
                             >
                                 <LogOut className="h-5 w-5" />
