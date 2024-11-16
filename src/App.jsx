@@ -5,6 +5,7 @@ import Auth from './views/auth/Auth.jsx';
 import Account from './views/account/Account.jsx';
 import Catalog from './views/catalog/Catalog.jsx';
 import MyCourses from './views/myCourses/MyCourses.jsx';
+import Admin from './views/admin/LandingAdmin.jsx';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/catalog/*" element={<Catalog />} />
         <Route path="/my-courses/*" element={<MyCourses />} />
         <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/admin/*" element={<Admin />} />
       </Routes>
     </Router>
   );
