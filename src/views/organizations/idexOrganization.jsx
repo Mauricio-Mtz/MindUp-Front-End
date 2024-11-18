@@ -7,7 +7,7 @@ import HeaderAdmin from "@/components/elements/headerAdmins";
 import HomeOrg from "@/views/organizations/homeOrg/homeOrg";
 import CourseOrg from "@/views/organizations/coursesOrg/coursesOrg";
 import Reports from "@/views/organizations/reportsOrg/reportsOrg";
-import Members from "@/views/organizations/memberOrg/membersOrg";
+import Members from "@/views/organizations/membersOrg/membersOrg";
 import EditAddCourse from "@/views/organizations/coursesOrg/edit_Add_Course";
 
 export default function IndexOrganization() {
