@@ -16,18 +16,20 @@ export default function CourseList() {
     const [courses, setCourses] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const coursesPerPage = 8; // Número de cursos por página
+    
+    const user = JSON.parse(localStorage.getItem('user'));
 
     // Simula la petición a un servidor para obtener los cursos
     useEffect(() => {
         setLoading(true);
         const fetchCourses = async () => {
             try {
-                const response = await fetch(`${SERVER}/courses/getAllCourses`, {
+                const response = await fetch(`${SERVER}/users/getCoursesByStudent?email=${user.email}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                });
+                });                
     
                 const coursesData = await response.json();
     
@@ -87,7 +89,7 @@ export default function CourseList() {
                     <Card key={course.id} className="w-full max-w-full h-[450px] flex flex-col justify-between mx-auto">
                         <CardHeader>
                             <CardTitle>{course.name}</CardTitle>
-                            <CardDescription>Añadido por: <b>{course.addedBy}</b></CardDescription>
+                            <CardDescription><b>{course.organization}</b></CardDescription>
                         </CardHeader>
                         <CardContent className="flex-grow flex items-center justify-center">
                             <div className="flex flex-col items-center justify-between h-full">

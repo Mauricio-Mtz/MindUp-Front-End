@@ -26,10 +26,6 @@ export const Subscription = ({ subscription }) => {
             </div>
 
             <p className="text-center text-sm mt-4">{subscription.renewalInfo}</p>
-            
-            <button className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg">
-                {subscription.callToAction}
-            </button>
 
             <p className="text-center text-xs mt-2">{subscription.terms}</p>
         </div>

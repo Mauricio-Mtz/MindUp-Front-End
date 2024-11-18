@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from '../../components/elements/navbar';
 import Profile from './Profile/Profile';
 import Payments from './Payments/Payments';
-// import CourseList from './Subscription';
 
 export default function Account() {
     return (

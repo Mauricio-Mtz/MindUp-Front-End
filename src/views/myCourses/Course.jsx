@@ -14,7 +14,7 @@ export default function Course() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [progress, setProgress] = useState(13)
+  const [progress, setProgress] = useState(13);
 
   useEffect(() => {
     const timer = setTimeout(() => setProgress(66), 500)
@@ -24,7 +24,7 @@ export default function Course() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`${SERVER}/courses/getCourse/${initialCourse.id}`);
+        const response = await fetch(`${SERVER}/content/getCourse/${initialCourse.id}`);
         const result = await response.json();
 
         if (result.success) {
@@ -72,7 +72,7 @@ export default function Course() {
             
             <ul className="flex flex-col gap-2">
               {course.modules.map(module => (
-                  <Card className="w-full" key={module.id} onClick={() => navigate(`/my-courses/module/${module.name}`, { state: { module } })}>
+                  <Card className="w-full" key={module.id} onClick={() => navigate(`/my-courses/module/${module.name}`, { state: { course } })}>
                     <CardHeader>
                       <div className="flex justify-between">
                         <CardTitle>{module.name}</CardTitle>

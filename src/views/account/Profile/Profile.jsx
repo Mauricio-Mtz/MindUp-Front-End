@@ -5,6 +5,7 @@ import { AccountForm } from './AccountForm';
 import { InformationForm } from './InformationForm';
 import { SettingsForm } from './SettingsForm';
 import { RecommendedCourses } from './RecommendedCourses';
+import { PreferencesForm } from './PreferencesForm';
 
 const SERVER = import.meta.env.VITE_API_URL;
 
@@ -35,7 +36,7 @@ export default function Profile() {
 
     const fetchRecommendedCourses = async () => {
         try {
-            const response = await fetch(`${SERVER}/Courses/getRecomendedCourses`);
+            const response = await fetch(`${SERVER}/content/getRecomendedCourses`);
             const data = await response.json();
             setRecommendedCourses(data.data);
         } catch (error) {
@@ -60,10 +61,13 @@ export default function Profile() {
                         <ScrollArea className='h-full border-b'>
                             <AccountForm userData={userData} setUserData={setUserData} />
                             <InformationForm userData={userData} setUserData={setUserData} />
+                            <PreferencesForm userData={userData} setUserData={setUserData} />
                             <SettingsForm />
                         </ScrollArea>
                     </div>
-                    <RecommendedCourses recommendedCourses={recommendedCourses} />
+                    {recommendedCourses.length > 0 && (
+                        <RecommendedCourses recommendedCourses={recommendedCourses} />
+                    )}
                 </div>
             )}
         </>

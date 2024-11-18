@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { CircleUser, Menu } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { useDarkMode } from '../../hooks/useDarkMode';
 import InputSerch from "./inputSerch";
@@ -22,11 +22,11 @@ export default function Navbar() {
     }, []);
 
     return (
-        <nav className="sticky top-0 z-30 static bg-white dark:bg-[#1F1F1F] mb-2 shadow-md py-2" style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.6)" }}>
+        <nav className="sticky top-0 z-30 bg-white dark:bg-[#1F1F1F] mb-2 shadow-md py-2" style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.6)" }}>
             <div className="flex items-center justify-between mx-auto px-2 sm:px-5 lg:px-10 xl:px-20">
                 {/* Logo */}
                 <div 
-                    className="cursor-pointer font-bold text-lg text-white" 
+                    className="cursor-pointer font-bold text-lg text-white hidden sm:block" 
                     onClick={() => {
                         if (isLoggedIn) {
                             navigate('/catalog');
@@ -91,6 +91,22 @@ export default function Navbar() {
                         </SheetTrigger>
                         <SheetContent side="left" className="p-4">
                             <nav className="flex flex-col space-y-4 h-full">
+                                {/* Logo */}
+                                <SheetTitle>
+                                    <div 
+                                        className="cursor-pointer font-bold text-lg text-white" 
+                                        onClick={() => {
+                                            if (isLoggedIn) {
+                                                navigate('/catalog');
+                                            } else {
+                                                navigate('/');
+                                            }
+                                        }}
+                                    >
+                                        <img src="/assets/images/minUP-logo.png" alt="logo" className="h-auto rounded-lg w-20 dark:hidden" />
+                                        <img src="/assets/images/minUP-logo-dark.png" alt="logo" className="h-auto hidden rounded-lg w-20 dark:block" />
+                                    </div>
+                                </SheetTitle>
                                 <h2 className="scroll-m-20 border-b pb-2 text-md font-semibold tracking-tight first:mt-0">Mi cuenta</h2>
                                 {isLoggedIn ? (
                                     <>

@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react';import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ProgressCircle } from '@/components/elements/progressCircle';
 import { Button } from "@/components/ui/button";
@@ -14,14 +15,20 @@ export default function CourseList() {
     const [loading, setLoading] = useState(false);
     const [courses, setCourses] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const coursesPerPage = 8; // Número de cursos por página
-
-    // Simula la petición a un servidor para obtener los cursos
+    const coursesPerPage = 8;
+    const user = JSON.parse(localStorage.getItem('user'));
+    
     useEffect(() => {
         setLoading(true);
+    
         const fetchCourses = async () => {
             try {
-                const response = await fetch(`${SERVER}/courses/getAllCourses`, {
+                // Verificar si user.preferences contiene algún valor
+                const endpoint = user.preferences && user.preferences.length > 0 
+                    ? `${SERVER}/content/getCatalog?email=${user.email}`
+                    : `${SERVER}/content/getAllCourses`;
+    
+                const response = await fetch(endpoint, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -48,7 +55,7 @@ export default function CourseList() {
         };
     
         fetchCourses();
-    }, []);
+    }, []);    
 
     // Calcular los índices de los cursos a mostrar
     const indexOfLastCourse = currentPage * coursesPerPage;
@@ -86,7 +93,7 @@ export default function CourseList() {
                     <Card key={course.id} className="w-full max-w-full h-[450px] flex flex-col justify-between mx-auto">
                         <CardHeader>
                             <CardTitle>{course.name}</CardTitle>
-                            <CardDescription>Añadido por: <b>{course.addedBy}</b></CardDescription>
+                            <CardDescription><b>{course.organization}</b></CardDescription>
                         </CardHeader>
                         <CardContent className="flex-grow flex items-center justify-center">
                             <div className="flex flex-col items-center justify-between h-full">
