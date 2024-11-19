@@ -18,6 +18,7 @@ export default function Auth() {
   const { toast } = useToast();
   const [showRegisterData, setShowRegisterData] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [typeRegister, setTypeRegister] = useState("native");
 
   useEffect(() => {
     if (alertData) {
@@ -54,7 +55,11 @@ export default function Auth() {
           // Guarda los datos del usuario en localStorage
           localStorage.setItem('user', JSON.stringify(userData.data));
           // Redirige al usuario
-          navigate('/catalog');
+          if(userData.data.type == 'member' || userData.data.type == 'organization'){
+            navigate('/admin');
+          }else if(userData.data.type == 'student'){
+            navigate('/catalog');
+          }
         }
         setLoading(false);
     })
@@ -69,6 +74,7 @@ export default function Auth() {
   };
 
   const handleRegisterSubmit = (registerData) => {
+    setTypeRegister(registerData.typeRegister)
     setLoading(true);
     fetch(`${SERVER}/auth/register`, {
       method: 'POST',
@@ -109,14 +115,23 @@ export default function Auth() {
       body: JSON.stringify(completeRegisterData),
     })
     .then(response => response.json())
-    .then(userData => {
+    .then(response => {
       setAlertData({
-        type: userData.success,
-        description: userData.message
+        type: response.success,
+        description: response.message
       });
-      if (userData.success) {
-        localStorage.setItem('user', JSON.stringify(userData.data));
-        navigate('/catalog');
+      if (response.success) {
+
+        let userData = JSON.parse(localStorage.getItem('user'));
+        userData.organization_id = response.data.organization_id;
+        userData.organization_name = response.data.organization_name;
+        localStorage.setItem('user', JSON.stringify(userData));
+
+        if(response.type == 'member' || response.type == 'organization'){
+          navigate('/admin');
+        }else if(response.type == 'student'){
+          navigate('/catalog');
+        }
       }
       setLoading(false);
     })
@@ -155,6 +170,7 @@ export default function Auth() {
               <RegisterData
                 onRegisterSubmit={handleRegisterDataSubmit}
                 setAlertData={setAlertData}
+                registerType={typeRegister}
               />
             ) : (
               <>

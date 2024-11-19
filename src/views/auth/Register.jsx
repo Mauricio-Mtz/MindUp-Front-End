@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useGoogleLogin } from '@react-oauth/google';
+import { Verify } from './verify';
 
 export const Register = ({ onSubmit, setAlertData }) => {
     const [registerData, setRegisterData] = useState({
@@ -16,6 +17,9 @@ export const Register = ({ onSubmit, setAlertData }) => {
         password: "",
     });
 
+    const [verificationCode, setVerificationCode] = useState(null);
+    const [open, setOpen] = useState(false);
+
     const handleInputChange = (e) => {
         const { id, value } = e.target;
         setRegisterData({ ...registerData, [id]: value });
@@ -23,46 +27,77 @@ export const Register = ({ onSubmit, setAlertData }) => {
 
     const validateRegister = () => {
         if (!registerData.typeUser || !registerData.email || !registerData.password) {
-          setAlertData({ type: false, title: "Faltan campos", description: "Por favor, completa todos los campos de registro." });
-          return false;
+            setAlertData({ type: false, title: "Faltan campos", description: "Por favor, completa todos los campos de registro." });
+            return false;
         }
         
         if (registerData.typeUser === "none") {
-          setAlertData({ type: false, title: "Usuario faltante", description: "Por favor, coloque su tipo de usuario." });
-          return false;
+            setAlertData({ type: false, title: "Usuario faltante", description: "Por favor, coloque su tipo de usuario." });
+            return false;
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(registerData.email)) {
-          setAlertData({ type: false, title: "Correo inválido", description: "Por favor, coloque un correo válido." });
-          return false;
+            setAlertData({ type: false, title: "Correo inválido", description: "Por favor, coloque un correo válido." });
+            return false;
         }
-    
+
         const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         if (!passwordRegex.test(registerData.password)) {
-          setAlertData({ type: false, title: "Contraseña inválida", description: "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una letra minúscula y un número." });
-          return false;
+            setAlertData({ type: false, title: "Contraseña inválida", description: "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una letra minúscula y un número." });
+            return false;
         }
-    
+
         return true;
     };
 
     const handleSubmit = () => {
         if (validateRegister()) {
-            onSubmit(registerData);
+            const code = Math.floor(100000 + Math.random() * 900000);
+            setVerificationCode(code);
+
+            sendVerificationEmail(registerData.email, code);
+            setAlertData({ type: true, title: "Verificación enviada", description: "Te hemos enviado un correo de verificación. Revisa tu bandeja de entrada." });
         }
+    };
+
+    const handleVerificationSubmit = () => {
+        setOpen(false);
+        setAlertData({ type: true, title: "Verificado", description: "Tu correo ha sido verificado exitosamente." });
+        onSubmit(registerData);
+    };
+
+    const sendVerificationEmail = (email, verificationCode) => {
+        const notificationData = {
+            to: email,
+            subject: "Verificación de Correo Electrónico",
+            text: `Gracias por registrarte. Tu código de verificación es: ${verificationCode}`,
+        };
+
+        fetch("http://localhost:3000/notifications/createNotification", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(notificationData),
+        })
+        .then((response) => response.json())
+        .then(() => {
+            setOpen(true);
+        })
+        .catch((error) => {
+            console.error("Error al enviar el correo", error);
+            setAlertData({ type: false, title: "Error", description: "Hubo un problema al enviar el correo de verificación." });
+        });
     };
 
     const registerGoogle = useGoogleLogin({
         onSuccess: (response) => {
-            // Validar si el tipo de usuario ha sido seleccionado
             if (registerData.typeUser === "none") {
                 setAlertData({ type: false, title: "Usuario faltante", description: "Por favor, seleccione su tipo de usuario antes de registrarse con Google." });
                 return;
             }
-    
-            // console.log('Inicio de sesión exitoso:', response);
-            // Verificar si se obtuvo el access_token
+
             if (response.access_token) {
                 fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${response.access_token}`, {
                     method: 'GET',
@@ -71,39 +106,29 @@ export const Register = ({ onSubmit, setAlertData }) => {
                         Accept: 'application/json',
                     },
                 })
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error('Error en la respuesta de usuario');
-                    }
-                    return res.json();
-                })
+                .then(res => res.json())
                 .then(userData => {
-                    // Actualizar loginData para incluir la información de Google
                     const googleLoginData = {
                         typeRegister: "google",
                         typeUser: registerData.typeUser,
-                        name: userData.name, // Asumiendo que el nombre está en userData
+                        name: userData.name,
                         email: userData.email,
-                        password: null, // No se usa la contraseña en el login de Google
+                        password: null,
                     };
-    
-                    // Enviar el objeto loginData al componente padre
+
                     onSubmit(googleLoginData);
                 })
                 .catch(error => {
                     console.error('Error al obtener los datos del usuario:', error);
                     setAlertData({ type: false, title: "Error", description: "No se pudo obtener los datos del usuario." });
                 });
-            } else {
-                console.error('No se encontró el access_token en la respuesta.');
-                setAlertData({ type: false, title: "Error", description: "No se pudo iniciar sesión." });
             }
         },
         onError: (error) => {
             console.log('Error al iniciar sesión:', error);
             setAlertData({ type: false, title: "Error", description: "Hubo un problema al iniciar sesión." });
         },
-    });    
+    });
 
     return (
         <Card className="flex flex-col h-full">
@@ -149,13 +174,19 @@ export const Register = ({ onSubmit, setAlertData }) => {
                                 minLength={8}
                                 value={registerData.password}
                                 onChange={handleInputChange}
-                                />
+                            />
                         </div>
                     </div>
                     <Button type="submit" className="w-full mt-auto" id="register">
                         Registrar
                     </Button>
                 </form>
+                <Verify 
+                    open={open} 
+                    setOpen={setOpen} 
+                    verificationCode={verificationCode} 
+                    handleVerificationSubmit={handleVerificationSubmit} 
+                />
                 <div className='flex flex-col items-center mt-auto'>
                     <Button className="bg-white border hover:bg-slate-300 text-black w-full mt-2 flex items-center justify-between overflow-hidden whitespace-nowrap" onClick={registerGoogle}>
                         <img src="/assets/svg/google-logo.svg" alt="" width={"20px"} />

@@ -6,13 +6,14 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ComboContry from "@/components/elements/comboCountry";
+import { Categories } from "@/components/elements/Categories";
 
-export const RegisterData = ({ onRegisterSubmit, setAlertData }) => {
+export const RegisterData = ({ onRegisterSubmit, setAlertData, registerType }) => {
     // Estados para almacenar los valores de los inputs de register
-    const sesion = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem('user'));
     const [registerData, setRegisterData] = useState({
-        typeUser: sesion.type,
-        email: sesion.email,
+        typeUser: user.type,
+        email: user.email,
         password: "",
         name: "",
         birthdate: "",
@@ -23,6 +24,7 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData }) => {
         rfc: "",
         fiscalAddress: "",
         fiscalRegime: "",
+        preferences: []
     });
 
     // Función para manejar los cambios en los inputs de register
@@ -36,6 +38,11 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData }) => {
         setRegisterData({ ...registerData, country: value });
     };
 
+    // Función para actualizar las categorías seleccionadas
+    const handleSelectedCategories = (categories) => {
+        setRegisterData({ ...registerData, preferences: categories });
+    };    
+
     // Validación general del formulario
     const validateRegister = () => {
         const { password, name, birthdate, country, grade, token, address, rfc, fiscalAddress, fiscalRegime } = registerData;
@@ -43,14 +50,14 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData }) => {
         // Validación modular de contraseña
         const validatePassword = (password) => /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password);
 
-        if (sesion.password === null && !validatePassword(password)) {
+        if (registerType === "google" && !validatePassword(password)) {
             setAlertData({ type: false, title: "Error", description: "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una letra minúscula y un número." });
             return false;
         }
 
         // Validaciones específicas según el tipo de usuario
         if (registerData.typeUser === "student") {
-            if (sesion.fullname === null && !name) {
+            if (registerType === "native" && !name) {
                 setAlertData({ type: false, title: "Error", description: "Por favor, ingrese nombre." });
                 return false;
             }
@@ -69,7 +76,7 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData }) => {
         }
 
         if (registerData.typeUser === "organization") {
-            if (sesion.name === null && !name) {
+            if (registerType === "native" && !name) {
                 setAlertData({ type: false, title: "Error", description: "Por favor, ingrese el nombre de su Organización." });
                 return false;
             }
@@ -80,7 +87,7 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData }) => {
         }
 
         if (registerData.typeUser === "member") {
-            if (sesion.fullname === null && !name) {
+            if (registerType === "native" && !name) {
                 setAlertData({ type: false, title: "Error", description: "Por favor, ingrese nombre." });
                 return false;
             }
@@ -113,8 +120,8 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData }) => {
             </CardHeader>
             <CardContent className="flex flex-col h-full">
                 <form onSubmit={handleRegisterSubmit} className="flex flex-col h-full">
-                    <div className="space-y-2 overflow-y-auto max-h-[321px] mb-4 border-y-2 rounded-md">
-                        {sesion.password === null && (
+                    <div className="space-y-2 overflow-y-auto max-h-[321px] mb-4 border-y-2 rounded-md pb-2">
+                        {registerType === "google" && (
                         <div className="space-y-1">
                             <Label htmlFor="password">Contraseña</Label>
                             <Input id="password" type="password" placeholder="********" value={registerData.password} onChange={handleRegisterInputChange} required />
@@ -122,7 +129,7 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData }) => {
                         )}
                         {registerData.typeUser === "student" && (
                         <>
-                            {sesion.fullname === null && (
+                            {registerType === "native" && (
                             <div className="space-y-1">
                                 <Label htmlFor="name">Nombre Completo</Label>
                                 <Input id="name" type="text" placeholder="Mauricio Martínez Rodríguez" value={registerData.name} onChange={handleRegisterInputChange} required />
@@ -153,11 +160,19 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData }) => {
                                     </SelectContent>
                                 </Select>
                             </div>
+                            <div className='space-y-1'>
+                                <Label htmlFor="password">Selecciona tus preferencias (Opcional)</Label>
+                                <Categories 
+                                    setSelectedCategories={handleSelectedCategories} 
+                                    initialSelectedCategories={[]} // Categorías iniciales
+                                    fetchGeneralCategories={true} // Hacer fetch si estamos en modo edición
+                                />
+                            </div>
                         </>
                         )}
                         {registerData.typeUser === "member" && (
                         <>
-                            {sesion.fullname === null && (
+                            {user.fullname === null && (
                             <div className="space-y-1">
                                 <Label htmlFor="name">Nombre Completo</Label>
                                 <Input id="name" type="text" placeholder="Mauricio Martínez Rodríguez" value={registerData.name} onChange={handleRegisterInputChange} required />
@@ -176,7 +191,7 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData }) => {
                         {registerData.typeUser === "organization" && (
                         <>
                         
-                            {sesion.name === null && (
+                            {user.name === null && (
                             <div className="space-y-1">
                                 <Label htmlFor="name">Nombre de la Organización</Label>
                                 <Input id="name" type="text" placeholder="Google SA de CV" value={registerData.name} onChange={handleRegisterInputChange} required />
