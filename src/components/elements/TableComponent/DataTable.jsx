@@ -10,7 +10,7 @@ export function DataTable({ table }) {
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead className="border" key={header.id}>
+                <TableHead  key={header.id}>
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                 </TableHead>
               ))}
@@ -22,7 +22,7 @@ export function DataTable({ table }) {
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} className="whitespace-nowrap">
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="p-2 text-sm border">
+                  <TableCell key={cell.id} className="p-2 text-sm ">
                     {/* {flexRender("123456789 123456789 123456789 123456789")} */}
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
