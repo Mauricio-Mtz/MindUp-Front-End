@@ -3,6 +3,7 @@ import ChartUserXcourse from "@/components/elements/charts/usuerByCourse/chartUs
 import ChartFinishedCourse from "@/components/elements/charts/averageFinishedCourses/averageFinishedCourses";
 import { LoadingState } from "@/components/elements/TableComponent/LoadingState";
 import TableComponent from "@/components/elements/TableComponent/TableComponent";
+import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -39,6 +40,23 @@ export default function CourseOrg({onEditCourse}) {
     }
   }
 
+  const handleAddCourse = () => {
+    const course = null;
+
+    navigate('/admin/add', { state: { course } });
+  };
+
+  const addCourse = async () => {
+    try {
+      const response = await fetch(`${SERVER}/content/getAllCourses`);
+      const data = await response.json();
+      setCourses(data.data);
+      console.error(data.data);
+    } catch (error) {
+      console.error("Error al obtener los miembros:", error);
+    }
+  }
+
   useEffect(() => {
     setTimeout(() => {
       fetchCourses();
@@ -65,15 +83,23 @@ export default function CourseOrg({onEditCourse}) {
             </div>
           </div>
           {/* Seccion de CRUD */}
-          {courses && courses.length > 0 ? (
-            <TableComponent 
-              TableComponentData={courses} 
-              TableComponentType={"courses"} 
-              onActionClick={handleAction} 
-            />
-          ) : (
-            <div>No hay miembros disponibles.</div>
-          )}
+          {/*<div className="flex flex-row w-full align-middle justify-end mb-0 mt-4 mx-6 px-4">
+            <Button className="mr-2" onClick={handleAddCourse}>
+              <p className="hidden md:block">+ Añadir curso</p>
+              <p className=" md:hidden">+</p>
+            </Button>
+          </div>*/}
+          <div className='bg-card border px-4 my-6 ' style={{borderRadius: '10px'}}>
+            {courses && courses.length > 0 ? (
+              <TableComponent 
+                TableComponentData={courses} 
+                TableComponentType={"courses"} 
+                onActionClick={handleDeleteCourse} 
+              />
+            ) : (
+              <div>No hay miembros disponibles.</div>
+            )}
+          </div>
         </>
       )}
     </div>
