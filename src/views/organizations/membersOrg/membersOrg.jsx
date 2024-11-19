@@ -1,65 +1,95 @@
-// MembersOrg.jsx
 import TableComponent from "@/components/elements/TableComponent/TableComponent";
 import { useEffect, useState } from "react";
-import ModalComponent from "./ModalComponent";
+import { DeleteModal } from "@/components/elements/ModalComponent/DeleteModal/DeleteModal";
+import GenerateCode from "@/components/elements/CodeComponent/GenerateCode/GenerateCode";
 
 const SERVER = import.meta.env.VITE_API_URL;
 
 export default function MembersOrg() {
   const [members, setMembers] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para abrir/cerrar la modal
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
+  const user = JSON.parse(localStorage.getItem('user'));
 
-  const handleDeleteMember = async (action, memberData) => {
-    switch (action) {
-      case "delete":
-        console.log("Deleting member", memberData);
-        break;
-      default:
-        break;
+  const orgId = user.organization_id; // Ejemplo de ID de la organización
+  const orgName = user.organization_name; // Ejemplo de nombre de la organización
+
+  // Manejo de apertura del modal
+  const openDeleteModal = (memberData) => {
+    setSelectedMember(memberData);
+    setIsDeleteModalOpen(true);
+  };
+
+  // Confirmación y ejecución de la eliminación
+  const confirmDeleteMember = async (memberData) => {
+    try {
+      const response = await fetch(`${SERVER}/users/deleteUser`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: memberData.email, type: "member" }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await fetchMembers();
+        setIsDeleteModalOpen(false);
+        setSelectedMember(null);
+      }
+      return data.success;
+    } catch (error) {
+      console.error("Error eliminando el miembro:", error);
+      return false;
     }
-  }
+  };
 
+  // Obtener miembros de la organización
   const fetchMembers = async () => {
     try {
-      const response = await fetch(`${SERVER}/users/getMembers`);
+      const response = await fetch(`${SERVER}/users/getMembers/${user.organization_id}`);
       const data = await response.json();
       setMembers(data.data);
     } catch (error) {
       console.error("Error al obtener los miembros:", error);
     }
-  }
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  }
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  }
+  };
 
   useEffect(() => {
     fetchMembers();
   }, []);
 
   return (
-    <div>
-      {/* Botón para abrir la modal */}
-      <button onClick={openModal} className="mb-4 px-4 py-2 bg-green-500 text-white rounded-md">
-        Unirse a la Organización
-      </button>
+    <>
+      <DeleteModal
+        type={"members"}
+        isOpen={isDeleteModalOpen}
+        closeModal={() => {
+          setIsDeleteModalOpen(false);
+          setSelectedMember(null);
+        }}
+        handleDelete={() => confirmDeleteMember(selectedMember)}
+      />
 
-      {/* Modal para unirse a la organización */}
-      <ModalComponent isOpen={isModalOpen} closeModal={closeModal} />
+      {/* Componente del código de registro */}
+      <GenerateCode orgId={orgId} orgName={orgName} />
 
+      {/* Tabla de miembros */}
       {members && members.length > 0 ? (
-        <TableComponent 
-          TableComponentData={members} 
-          TableComponentType={"members"} 
-          onActionClick={handleDeleteMember} 
+        <TableComponent
+          key={members.length}
+          TableComponentData={members}
+          TableComponentType={"members"}
+          onActionClick={(action, member) =>
+            action === "delete" ? openDeleteModal(member) : null
+          }
         />
       ) : (
-        <div>No hay miembros disponibles.</div>
+        <div className="text-gray-500 text-center mt-4">
+          No hay miembros disponibles.
+        </div>
       )}
-    </div>
+    </>
   );
 }
