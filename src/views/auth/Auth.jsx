@@ -121,6 +121,12 @@ export default function Auth() {
         description: response.message
       });
       if (response.success) {
+
+        let userData = JSON.parse(localStorage.getItem('user'));
+        userData.organization_id = response.data.organization_id;
+        userData.organization_name = response.data.organization_name;
+        localStorage.setItem('user', JSON.stringify(userData));
+
         if(response.type == 'member' || response.type == 'organization'){
           navigate('/admin');
         }else if(response.type == 'student'){

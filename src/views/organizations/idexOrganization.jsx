@@ -12,7 +12,8 @@ import EditAddCourse from "@/views/organizations/coursesOrg/edit_Add_Course";
 
 export default function IndexOrganization() {
     const [title, setTitle] = useState("Inicio");
-    const [organization, setOrganization] = useState("Nombre de la organización");
+    const user = JSON.parse(localStorage.getItem('user'));
+    const organization = user.organization_name;
 
     const navigate = useNavigate();
     const location = useLocation();
