@@ -2,6 +2,7 @@ import ChartUserXcourse from "@/components/elements/charts/usuerByCourse/chartUs
 import ChartFinishedCourse from "@/components/elements/charts/averageFinishedCourses/averageFinishedCourses";
 import Table1 from "@/components/elements/tables/tableCourses/tableCourses";
 import TableComponent from "@/components/elements/TableComponent/TableComponent";
+import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +11,7 @@ const SERVER = import.meta.env.VITE_API_URL;
 export default function CourseOrg({onEditCourse}) {
   const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
-  const fetchMembers = async () => {
+  const fetchCourses = async () => {
     try {
       const response = await fetch(`${SERVER}/content/getAllCourses`);
       const data = await response.json();
@@ -35,8 +36,25 @@ export default function CourseOrg({onEditCourse}) {
     }
   }
 
+  const handleAddCourse = () => {
+    const course = null;
+
+    navigate('/admin/add', { state: { course } });
+  };
+
+  const addCourse = async () => {
+    try {
+      const response = await fetch(`${SERVER}/content/getAllCourses`);
+      const data = await response.json();
+      setCourses(data.data);
+      console.error(data.data);
+    } catch (error) {
+      console.error("Error al obtener los miembros:", error);
+    }
+  }
+
   useEffect(() => {
-    fetchMembers();
+    fetchCourses();
   }, []);
 
 
@@ -55,6 +73,12 @@ export default function CourseOrg({onEditCourse}) {
         </div>
       </div>
       {/* Seccion de CRUD */}
+      {/*<div className="flex flex-row w-full align-middle justify-end mb-0 mt-4 mx-6 px-4">
+        <Button className="mr-2" onClick={handleAddCourse}>
+          <p className="hidden md:block">+ Añadir curso</p>
+          <p className=" md:hidden">+</p>
+        </Button>
+      </div>*/}
       <div className='bg-card border px-4 my-6 ' style={{borderRadius: '10px'}}>
         {courses && courses.length > 0 ? (
           <TableComponent 
@@ -65,7 +89,6 @@ export default function CourseOrg({onEditCourse}) {
         ) : (
           <div>No hay miembros disponibles.</div>
         )}
-        <Table1 handleEditCourse={onEditCourse}/>
       </div>          
     </div>
   );
