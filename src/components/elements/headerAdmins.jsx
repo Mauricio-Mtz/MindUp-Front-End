@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Factory } from "lucide-react";
 import { useDarkMode } from '../../hooks/useDarkMode';
@@ -20,7 +20,7 @@ export default function HeaderAdmin({title, organization}) {
                         {organization}
                     </p>
 
-                    <DropdownMenu>
+                    {/* <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                         <Button
                             variant="outline"
@@ -36,7 +36,7 @@ export default function HeaderAdmin({title, organization}) {
                         <DropdownMenuItem>Configuración</DropdownMenuItem>
                         <DropdownMenuItem>Asistencia</DropdownMenuItem>
                         </DropdownMenuContent>
-                    </DropdownMenu>
+                    </DropdownMenu> */}
                     
                     <div className=" hidden sm:flex items-center space-x-2">
                         <span className="text-gray-600 dark:text-gray-400">🌞</span>
