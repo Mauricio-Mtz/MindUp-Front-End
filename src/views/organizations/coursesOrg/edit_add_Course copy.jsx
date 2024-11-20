@@ -7,8 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLocation } from "react-router-dom";
-import {Dialog,DialogContent,DialogDescription,DialogFooter,DialogHeader,DialogTitle,DialogTrigger,} from "@/components/ui/dialog"
-import { toast } from "sonner";
 
 const SERVER = import.meta.env.VITE_API_URL;
 
@@ -30,9 +28,6 @@ export default function EditAddCourse() {
   const [text, setText] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   //const [questions, setQuestions] = useState([]);
-
-  const [nameModule, setNameModule] = useState("");
-  const [level , setLevel] = useState("");
 
   const location = useLocation();
   const { course } = location.state || {};
@@ -93,8 +88,8 @@ export default function EditAddCourse() {
     //module -> content [] -> NuevaSection
     // Utiliza valores predeterminados si los inputs están vacíos
     var tempData = [];
-    if(module?.content){
-      module?.content.map( (item) => {
+    if(module){
+      module.content.map( (item) => {
         console.log(item);
         tempData.push(item);
       })
@@ -104,10 +99,6 @@ export default function EditAddCourse() {
       text: section?.text || text || "",
       videoUrl: section?.videoUrl || videoUrl || "",
     };
-    if(sectionData.text == "" || sectionData.subTitle == "" ){
-      toast.error("Escriba el subtitulo y el texto del contenido.");
-      return;
-    }
 
     if(section != null){
       module.content[sectionIndex] = sectionData;
@@ -137,8 +128,7 @@ export default function EditAddCourse() {
       //const response = await fetch(`${SERVER}/content/getCourse/${course.id}`);
       const result = await response.json();
 
-      if (result.success) {    
-        toast.success("Seccion agregada correctamente");    
+      if (result.success) {        
         console.log("Curso cargado:", result.rows);
         setSubtitle("");
         setText("");
@@ -146,10 +136,10 @@ export default function EditAddCourse() {
         setSection(null); 
         fetchCourse();
       } else {
-        toast.error("Error en la respuesta del servidor.");
+        console.error("Error en la respuesta del servidor.");
       }
     } catch (err) {
-      toast.error("Error del servidor");
+      console.error("Error del servidor", err);
     }
 
 
@@ -161,7 +151,7 @@ export default function EditAddCourse() {
     var tempData = [];
 
     
-    if(module?.quiz?.questions){
+    if(module){
       module.quiz.questions.map( (item) => {
         tempData.push(item);
       })
@@ -172,11 +162,6 @@ export default function EditAddCourse() {
       question: question.question || "",
       correctAnswer: question.correctAnswer >= 0 ? question.correctAnswer : -1,
     };
-
-    if(finalQuestion.question == "" || finalQuestion.correctAnswer === -1 || finalQuestion.options.length == 0){
-      toast.error("Llene correctamente los campos de la pregunta");
-      return;
-    }
 
     if(questionIndex != null){      
       console.log('no ok')
@@ -213,7 +198,7 @@ export default function EditAddCourse() {
      const result = await response.json();
 
       if (result.success) {        
-        toast.success("Pregunta agregada correctamente");
+        console.log("Curso cargado:", result.rows);
         setQuestion({
           question: "", // Título de la pregunta
           options: ["", "", "", ""], // Opciones por defecto
@@ -221,48 +206,12 @@ export default function EditAddCourse() {
         })
         fetchCourse();
       } else {
-        toast.error("Error en la respuesta del servidor.");
+        console.error("Error en la respuesta del servidor.");
       }
     }catch (err) {
-      toast.error("Error del servidor");
+      console.error("Error del servidor", err);
     }
   };
-
-  const sendModule = async () => {
-    const sendData = {
-      name: nameModule,
-      level: level,
-      courseId: course.id
-    }
-    if(sendData.name == "" || sendData.level == ""){
-      toast.error("Llene correctamente los campos del módulo");
-      return;
-    }
-    console.log('sendData: ', sendData);
-    //console.log("Valores del módulo:", sendData);
-
-    try {
-      const response = await fetch(
-       `${SERVER}/content/addNewModule`,{
-         method: 'PUT',
-         headers: {
-           'Content-Type': 'application/json',
-         },
-         body: JSON.stringify(sendData),
-       }
-     )
-     const result = await response.json();
-
-      if (result.success) {        
-        toast.success("Módulo agregado correctamente!");
-        fetchCourse();
-      } else {
-        toast.error("Error en la respuesta del servidor.");
-      }
-    }catch (err) {
-      toast.error("Error del servidor");
-    }
-  }
 
   return (
     <div className="mt-4 mb-6 flex gap-4 flex-wrap sm:flex-nowrap">
@@ -409,31 +358,6 @@ export default function EditAddCourse() {
               ) : (
                 <Skeleton className="h-4 w-full" />
               )}
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="w-full mt-4">Agregar Módulo</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle className="mb-4">Agrega un nuevo Módulo</DialogTitle> 
-                    <DialogDescription></DialogDescription>           
-                  </DialogHeader>
-                  
-                  <div >
-                    <div className="gap-2 flex flex-col mb-4">
-                      <Label> Nombre del Módulo </Label>
-                      <Input placeholder="Nombre del Módulo" className="col-span-3" value={nameModule} onChange={(e) => setNameModule(e.target.value)}/>
-                    </div>
-                    <div className="gap-2 flex flex-col">
-                      <Label> Nivel del curso </Label>
-                      <Input placeholder="1 - 10" className="col-span-3" value={level} onChange={(e) => setLevel(e.target.value)}/>
-                    </div>
-                    <div className="flex w-full">
-                      <Button onClick={sendModule} className="w-full mt-4">Añadir <strong>+</strong></Button>
-                    </div>
-                  </div>                  
-                </DialogContent>
-              </Dialog>
             </div>
           </CardContent>
         </Card>
