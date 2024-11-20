@@ -16,9 +16,9 @@ export default function Module() {
   useEffect(() => {
     const fetchCourseContent = async () => {
       try {
-        const response = await fetch(`${SERVER}/content/getModuleDetail/${moduleId}`);
+        const response = await fetch(`${SERVER}/content/getModuleDetailCatalog/${moduleId}`);
         const result = await response.json();
-        setCourseContent(result.data);
+        setCourseContent(result.data[0]);
       } catch (err) {
         console.error("Error al obtener los datos del curso", err);
       }
@@ -30,6 +30,7 @@ export default function Module() {
   if (!courseContent) return <ContentLoader />;
 
   const { content, quiz } = courseContent;
+  console.log(courseContent)
 
   return (
     <>

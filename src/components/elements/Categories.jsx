@@ -5,16 +5,13 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 const SERVER = import.meta.env.VITE_API_URL;
 
 export const Categories = ({ setSelectedCategories, initialSelectedCategories = [], fetchGeneralCategories = false }) => {
-    const [categories, setCategories] = useState([]); // Para las categorías generales
-    const [selectedCategories, setSelectedCategoriesState] = useState(initialSelectedCategories); // Inicializa con las preferencias seleccionadas
+    const [categories, setCategories] = useState([]); 
+    const [selectedCategories, setSelectedCategoriesState] = useState(initialSelectedCategories);
 
     useEffect(() => {
-        // Si se pasan categorías iniciales, las usamos directamente
-        if (!fetchGeneralCategories) {
-            setCategories(initialSelectedCategories);
-            setSelectedCategoriesState(initialSelectedCategories); // Asegura que las categorías seleccionadas se actualicen
-        }
-    }, [initialSelectedCategories, fetchGeneralCategories]);
+        // Actualizar selectedCategories cuando initialSelectedCategories cambie
+        setSelectedCategoriesState(initialSelectedCategories);
+    }, [initialSelectedCategories]);
 
     useEffect(() => {
         // Carga categorías generales si fetchGeneralCategories es true
@@ -36,8 +33,11 @@ export const Categories = ({ setSelectedCategories, initialSelectedCategories = 
                 }
             };
             fetchCategories();
+        } else {
+            // Si no se está en modo de edición, usar las categorías iniciales
+            setCategories(initialSelectedCategories);
         }
-    }, [fetchGeneralCategories]);
+    }, [fetchGeneralCategories, initialSelectedCategories]);
 
     const handleToggle = (category) => {
         setSelectedCategoriesState((prevSelected) => {
@@ -46,7 +46,7 @@ export const Categories = ({ setSelectedCategories, initialSelectedCategories = 
                 ? prevSelected.filter((item) => item !== category)
                 : [...prevSelected, category];
             
-            setSelectedCategories(updatedSelected); // Notificar al componente padre
+            setSelectedCategories(updatedSelected);
             return updatedSelected;
         });
     };
@@ -63,7 +63,7 @@ export const Categories = ({ setSelectedCategories, initialSelectedCategories = 
                         selected={selectedCategories.includes(category)}
                         onClick={() => handleToggle(category)}
                         aria-label={`Toggle ${category}`}
-                        disabled={!fetchGeneralCategories} // Deshabilitar si no estamos en modo de edición
+                        disabled={!fetchGeneralCategories}
                     >
                         <p className='h-4 w-full text-xs'>{category}</p>
                     </ToggleGroupItem>
