@@ -36,12 +36,11 @@ export default function TableComponent({TableComponentData, TableComponentType, 
           <>
             <div className="flex items-center justify-between py-4 gap-4">
               <SearchBar
-                filterValue={table.getColumn("fullname")?.getFilterValue() ?? ""}
+                filterValue={table.getColumn(TableComponentType === "courses" ? "name" : "fullname")?.getFilterValue() ?? ""}
                 setFilterValue={(value) => {
-                  table.getColumn("fullname")?.setFilterValue(value);
-                  table.getColumn("name")?.setFilterValue(value);
+                  table.getColumn(TableComponentType === "courses" ? "name" : "fullname")?.setFilterValue(value);
                 }}
-                />
+              />
               <ColumnVisibilityDropdown columns={table.getAllColumns().filter(column => column.getCanHide() && column.id !== "actions")} />
             </div>
 

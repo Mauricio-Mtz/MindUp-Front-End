@@ -9,7 +9,7 @@ const translateKeys = {
   status: "Estado",
   name: "Nombre",
   country: "País",
-  participants: "Participantes",
+  participants: "No. de participantes",
   description: "Descripción",
 };
 
@@ -42,11 +42,14 @@ export const columns = (data, target, onActionClick) => {
       actions: (item) => {
         return (
           <>
+            <DropdownMenuItem onClick={() => onActionClick("detail", item)}>
+              Ver detalles del curso
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onActionClick("edit", item)}>
               Editar Curso
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onActionClick("delete", item)}>
-              Elimnar Curso
+            <DropdownMenuItem onClick={() => onActionClick("desactive", item)}>
+              Desactivar curso
             </DropdownMenuItem>
           </>
         );
