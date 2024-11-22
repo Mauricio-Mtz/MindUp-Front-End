@@ -157,7 +157,7 @@ export default function CourseDetail() {
           </Card>
 
           {/* Modules Section */}
-          <div>
+          <div className="space-y-8">
             <h2 className="text-2xl font-bold mb-4">Módulos del Curso</h2>
             {course.modules && course.modules.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">

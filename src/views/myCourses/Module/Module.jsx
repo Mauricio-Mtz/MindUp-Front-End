@@ -2,23 +2,23 @@ import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ModuleSidebar } from "./ModuleSidebar";
 import { ContentLoader } from "./ContentLoader";
-import { ModuleContent } from "./ModuleContent";
+import { ModuleContent } from "./ModuleContent/ModuleContent";
 import { PaginationControls } from "./PaginationControls";
 
 const SERVER = import.meta.env.VITE_API_URL;
 
 export default function Module() {
   const location = useLocation();
-  const { course, selectedModuleId } = location.state || {};
+  const { course, selectedModuleId, courseProgressId } = location.state || {};
   const [moduleId, setModuleId] = useState (selectedModuleId);
-  const [moduleContent, sContent] = useState(null);
+  const [moduleContent, setContent] = useState(null);
 
   useEffect(() => {
     const fetchModuleContent = async () => {
       try {
         const response = await fetch(`${SERVER}/content/getModuleDetailCatalog/${moduleId}`);
         const result = await response.json();
-        sContent(result.data[0]);
+        setContent(result.data[0]);
       } catch (err) {
         console.error("Error al obtener los datos del curso", err);
       }
@@ -36,7 +36,7 @@ export default function Module() {
       <ModuleSidebar modules={course.modules} setModule={setModuleId} course={course} />
       <div>
         {content ? (
-          <ModuleContent content={content} questions={quiz.questions} studentCourseId={6} moduleId={moduleContent.id} />
+          <ModuleContent content={content} questions={quiz.questions} studentCourseId={courseProgressId} moduleId={moduleContent.id} />
         ) : (
           <ContentLoader />
         )}
