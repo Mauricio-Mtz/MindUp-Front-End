@@ -7,11 +7,10 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHe
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function ModuleSidebar({ modules, setModule, course }) {
-  console.log(course)
   const navigate = useNavigate();
 
   return (
-    <div className="absolute">
+    <div className="fixed left-4 border-y border-r rounded-r-md z-20 bg-background hover:bg-accent">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="ghost">

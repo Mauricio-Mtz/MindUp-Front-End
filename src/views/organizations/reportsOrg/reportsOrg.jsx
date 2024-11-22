@@ -1,30 +1,54 @@
-import { useState } from "react";
-import {Card,CardContent,CardFooter,CardHeader,CardTitle,} from "@/components/ui/card";
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {Select,SelectContent,SelectGroup,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import axios from 'axios';
 import { toast } from "sonner";
 
 const SERVER = import.meta.env.VITE_API_URL;
 
 export default function ReportsOrg() {
-  const reportType      =  ["Miembros", "Cursos", "Usuarios"];
-  const reportMembers   =  ["Todos", "Activos", "Inactivos"];
-  const reportCourses   =  ["Todos", "Activos", "Inactivos", "Participantes"];
-  const reportUsuarios  =  ["Todos x Curso","Avance x curso","Calificaciones","Usuarios Terminados",];
-  const reportFormats   =  ["xlsx", "pdf"]; // Nuevas opciones para el formato
+  const reportType = ["Miembros", "Cursos", "Usuarios"];
+  const reportMembers = ["Todos", "Activos", "Inactivos"];
+  const reportCourses = ["Todos", "Activos", "Inactivos"];
+  const reportUsuarios = ["Por Curso", "Avance por curso", "Usuarios Terminados por curso"];
+  const reportFormats = ["xlsx", "pdf"];
 
-  // Estado para cada campo del formulario
   const [selectedReportType, setSelectedReportType] = useState("");
   const [selectedReport, setSelectedReport] = useState("");
-  const [nombre, setNombre] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [selectedFormat, setSelectedFormat] = useState("pdf"); // Estado para el formato
+  const [selectedFormat, setSelectedFormat] = useState("pdf");
+  const [courses, setCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
-  // Determina las opciones para el segundo SelectInput en base al tipo seleccionado
+  // Obtener cursos disponibles si es necesario
+  useEffect(() => {
+    if (selectedReportType === "Usuarios") {
+      fetchCourses();
+    } else {
+      setCourses([]);
+      setSelectedCourse(null);
+    }
+  }, [selectedReportType]);
+
+  // Reset course selection when report category changes
+  useEffect(() => {
+    setSelectedCourse(null);
+  }, [selectedReport]);
+
+  const fetchCourses = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const response = await fetch(`${SERVER}/content/getCoursesByOrganization/${user.organization_id}`);
+      const data = await response.json();
+      setCourses(data.data);
+    } catch (error) {
+      console.error("Error al obtener los cursos:", error);
+      toast.error("No se pudieron cargar los cursos.");
+    }
+  }
+
   const getReportOptions = () => {
     if (selectedReportType === "Miembros") return reportMembers;
     if (selectedReportType === "Cursos") return reportCourses;
@@ -32,45 +56,64 @@ export default function ReportsOrg() {
     return [];
   };
 
-  // Manejar el envío del formulario
- 
   const downloadReport = async () => {
     const reportData = {
       reportType: selectedReportType,
-      report: selectedReport,
-      name: nombre,
-      startDate,
-      endDate,
-      format: selectedFormat, // Incluimos el formato seleccionado
+      reportCategory: selectedReport,
+      course: selectedCourse,
+      format: selectedFormat,
     };
-    console.log("Datos recopilados:", reportData);
-    if (!reportData.report) {
-      toast("Seleccione un reporte", {
-        description: "Seleccione el tipo de reporte y el reporte.",
-        dismissible: true,
-        duration: 5000,
-      });
+  
+    // Validations
+    if (!reportData.reportCategory || !reportData.reportType) {
+      toast.error("Seleccione un tipo de reporte y un reporte válido.");
       return;
     }
+  
+    if (reportData.reportType === "Usuarios" && 
+        ["Por Curso", "Avance por curso", "Usuarios Terminados por curso"].includes(reportData.reportCategory)) {
+      if (!reportData.course) {
+        toast.error("Seleccione el curso del cual desea hacer el reporte.");
+        return;
+      }
+    }
+  
     try {
       const response = await axios.post(
-        ` ${SERVER}/reports/getReport`,
+        `${SERVER}/reports/getReport`,
         reportData,
-        { responseType: 'blob' } // Importante para manejar archivos
+        { responseType: 'blob' }
       );
   
+      // Verify if response is JSON error
+      const contentType = response.headers['content-type'];
+      if (contentType && contentType.includes('application/json')) {
+        const text = await response.data.text();
+        const jsonResponse = JSON.parse(text);
+  
+        if (!jsonResponse.success) {
+          toast.error(jsonResponse.message || 'Error al generar el reporte.');
+          return;
+        }
+      }
+  
+      // Process downloadable file
+      const date = new Date().toISOString().split('T')[0] + '-' + 
+                   new Date().getHours().toString().padStart(2, '0') + 
+                   new Date().getMinutes().toString().padStart(2, '0');
       const fileFormat = reportData.format === 'xlsx' ? 'xlsx' : 'pdf';
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `report.${fileFormat}`);
+      link.setAttribute('download', `${selectedReportType} - ${selectedReport} - ${date}.${fileFormat}`);
       document.body.appendChild(link);
       link.click();
       link.remove();
     } catch (error) {
       console.error('Error al descargar el reporte:', error);
+      toast.error('Error al descargar el reporte.');
     }
-  }; 
+  };
 
   return (
     <div>
@@ -80,68 +123,80 @@ export default function ReportsOrg() {
         </CardHeader>
         <CardContent>
           <form
-            className="flex flex-wrap gap-4"
+            className="flex flex-wrap gap-4 items-center justify-center"
             onSubmit={(e) => {
               e.preventDefault();
               downloadReport();
             }}
           >
-            <div className="w-[200px]">
-              <Label htmlFor="select">Tipo de reporte</Label>
+            {/* Selector de tipo de reporte */}
+            <div className="w-[250px]">
+              <Label>Tipo de reporte</Label>
               <SelectInput
                 reportType={reportType}
                 placeholder="Selecciona un tipo"
                 onSelectChange={setSelectedReportType}
+                value={selectedReportType}
               />
             </div>
-            <div className="w-[200px]">
-              <Label htmlFor="select">Reporte</Label>
+
+            {/* Selector de categoría por tipo de reporte */}
+            <div className="w-[250px]">
+              <Label>Categoría</Label>
               <SelectInput
                 reportType={getReportOptions()}
                 placeholder="Selecciona un reporte"
                 onSelectChange={setSelectedReport}
+                value={selectedReport}
                 disabled={!selectedReportType}
               />
             </div>
-            <div className="w-[300px]">
-              <Label htmlFor="nombre">Nombre del {selectedReportType}</Label>
-              <Input
-                id="nombre"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                disabled={!selectedReportType}
-              />
-            </div>
-            <div className="w-[200px]">
-              <Label htmlFor="startDate">Fecha Inicial</Label>
-              <Input
-                type="date"
-                id="startDate"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                disabled={!selectedReportType}
-              />
-            </div>
-            <div className="w-[200px]">
-              <Label htmlFor="endDate">Fecha Final</Label>
-              <Input
-                type="date"
-                id="endDate"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                disabled={!selectedReportType}
-              />
-            </div>
-            <div className="w-[100px]">
-              <Label htmlFor="select">Formato</Label>
+
+            {/* Selector de curso para reportes de usuarios específicos */}
+            {selectedReportType === "Usuarios" && 
+             ["Por Curso", "Avance por curso", "Usuarios Terminados por curso"].includes(selectedReport) && (
+              <div className="w-[250px]">
+                <Label>Curso</Label>
+                <Select 
+                  onValueChange={(value) => {
+                    setSelectedCourse(value);
+                  }} 
+                  value={selectedCourse?.id || ""}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder={selectedCourse ? courses.find((course) => course.id === selectedCourse)?.name : "Selecciona un curso"}/>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {courses.length > 0 ? (
+                        courses.map((course) => (
+                          <SelectItem key={course.id} value={course.id}>
+                            {course.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem disabled value="">
+                          No hay cursos disponibles
+                        </SelectItem>
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Selector de formato */}
+            <div className="w-[150px]">
+              <Label>Formato</Label>
               <SelectInput
                 reportType={reportFormats}
                 placeholder="Selecciona un formato"
                 onSelectChange={setSelectedFormat}
-                disabled={!selectedReportType}
                 value={selectedFormat}
               />
             </div>
+
+            {/* Botón para generar reporte */}
             <div className="flex w-full align-center justify-center">
               <Button type="submit">Generar Reporte</Button>
             </div>
@@ -152,31 +207,22 @@ export default function ReportsOrg() {
   );
 }
 
-// Componente SelectInput mejorado con soporte para estilos personalizados y onChange
-const SelectInput = ({
-  reportType,
-  placeholder,
-  onSelectChange,
-  disabled = false,
-  value,
-}) => {
-  const [selected, setSelected] = useState("");
-
-  const handleChange = (value) => {
-    setSelected(value);
-    if (onSelectChange) onSelectChange(value);
-  };
-
+// Componente SelectInput mejorado
+const SelectInput = ({ reportType, placeholder, onSelectChange, disabled = false, value }) => {
   return (
-    <Select onValueChange={handleChange} disabled={disabled} value={value}>
+    <Select 
+      onValueChange={onSelectChange} 
+      disabled={disabled} 
+      value={value}
+    >
       <SelectTrigger className="w-full">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           {reportType.map((item, index) => (
-            <SelectItem key={index} value={item}>
-              {item}
+            <SelectItem key={index} value={item.value || item}>
+              {item.label || item }
             </SelectItem>
           ))}
         </SelectGroup>
