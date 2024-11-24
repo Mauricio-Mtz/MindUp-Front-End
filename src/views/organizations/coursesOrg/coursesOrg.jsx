@@ -94,7 +94,7 @@ export default function CourseOrg({onEditCourse}) {
               <TableComponent 
                 TableComponentData={courses} 
                 TableComponentType={"courses"} 
-                onActionClick={handleDeleteCourse} 
+                onActionClick={handleAction} 
               />
             ) : (
               <div>No hay miembros disponibles.</div>
