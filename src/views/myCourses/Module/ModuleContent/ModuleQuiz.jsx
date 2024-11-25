@@ -1,32 +1,24 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
-import { VideoEmbed } from "./VideoEmbed";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { 
-    Dialog, 
-    DialogContent, 
-    DialogHeader, 
-    DialogTitle, 
-    DialogDescription,
-    DialogFooter
-} from "@/components/ui/dialog";
 import { Timer, PlayCircle } from "lucide-react";
+import { ResultDialog } from './ResultDialog';
 
 const SERVER = import.meta.env.VITE_API_URL;
 
-export function ModuleContent({ content, questions, studentCourseId, moduleId }) {
+export function ModuleQuiz({ questions, studentCourseId, moduleId }) {
     const [selectedAnswers, setSelectedAnswers] = useState(new Array(questions.length).fill(null));
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [resultMessage, setResultMessage] = useState('');
     const [resultDialogOpen, setResultDialogOpen] = useState(false);
     const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
     const [time, setTime] = useState(0);
     const [finalTime, setFinalTime] = useState(0);
     const [isQuizStarted, setIsQuizStarted] = useState(false);
     const [isQuizFinished, setIsQuizFinished] = useState(false);
+    console.log(questions)
 
     useEffect(() => {
         let intervalId;
@@ -87,28 +79,16 @@ export function ModuleContent({ content, questions, studentCourseId, moduleId })
             if (data.success) {
                 setCorrectAnswersCount(correctCount);
                 setResultDialogOpen(true);
-                setResultMessage('¡Progreso registrado con éxito!');
-            } else {
-                setResultMessage('Hubo un error al registrar el progreso.');
             }
         } catch (error) {
             console.error('Error en la conexión con el servidor. ', error)
-            setResultMessage('Error en la conexión con el servidor.');
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <div>
-            {content.map((item, index) => (
-                <div key={index} className="mb-10">
-                    <h1 className="text-2xl font-bold">{item?.subTitle ?? null}</h1>
-                    <p className="mt-4">{item?.text ?? null}</p>
-                    <VideoEmbed videoUrl={item.videoUrl} />
-                </div>
-            ))}
-
+        <>
             <Card className="flex flex-col justify-between mx-auto mt-5 w-full relative">
                 {(!isQuizStarted || isQuizFinished) && (
                     <div className="absolute inset-0 backdrop-blur-md bg-black/30 z-10 rounded-lg flex flex-col items-center justify-center gap-4">
@@ -180,45 +160,15 @@ export function ModuleContent({ content, questions, studentCourseId, moduleId })
                     </Button>
                 </CardFooter>
             </Card>
-            
-            {resultMessage && <div className="mt-4 text-center">{resultMessage}</div>}
 
-            <Dialog open={resultDialogOpen} onOpenChange={setResultDialogOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Resultado del Cuestionario</DialogTitle>
-                        <DialogDescription>
-                            Aquí está el resumen de tu desempeño:
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="text-center">
-                        <p className="text-xl font-bold">
-                            Respuestas Correctas: {correctAnswersCount} de {questions.length}
-                        </p>
-                        <p className="text-lg mt-2">
-                            Tiempo total: {formatTime(finalTime)}
-                        </p>
-                        {correctAnswersCount === questions.length && (
-                            <p className="text-green-600 mt-2">¡Perfecto! 🎉</p>
-                        )}
-                        {correctAnswersCount > 0 && correctAnswersCount < questions.length && (
-                            <p className="text-yellow-600 mt-2">¡Buen intento! Sigue practicando. 💪</p>
-                        )}
-                        {correctAnswersCount === 0 && (
-                            <p className="text-red-600 mt-2">No te desanimes. Revisa el material y vuelve a intentarlo. 📚</p>
-                        )}
-                    </div>
-                    <DialogFooter className="flex justify-center gap-2 sm:justify-center">
-                        <Button
-                            className="w-full"
-                            variant="outline"
-                            onClick={() => setResultDialogOpen(false)}
-                        >
-                            Cerrar
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-        </div>
+            <ResultDialog 
+                open={resultDialogOpen}
+                onOpenChange={setResultDialogOpen}
+                correctAnswersCount={correctAnswersCount}
+                totalQuestions={questions.length}
+                finalTime={finalTime}
+                formatTime={formatTime}
+            />
+        </>
     );
 }

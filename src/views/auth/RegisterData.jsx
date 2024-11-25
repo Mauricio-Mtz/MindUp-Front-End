@@ -163,9 +163,9 @@ export const RegisterData = ({ onRegisterSubmit, setAlertData, registerType }) =
                             <div className='space-y-1'>
                                 <Label htmlFor="password">Selecciona tus preferencias (Opcional)</Label>
                                 <Categories 
+                                    mode="edit" // Hacer fetch si estamos en modo edición
                                     setSelectedCategories={handleSelectedCategories} 
                                     initialSelectedCategories={[]} // Categorías iniciales
-                                    fetchGeneralCategories={true} // Hacer fetch si estamos en modo edición
                                 />
                             </div>
                         </>

@@ -42,14 +42,11 @@ export const columns = (data, target, onActionClick) => {
       actions: (item) => {
         return (
           <>
-            <DropdownMenuItem onClick={() => onActionClick("detail", item)}>
-              Ver detalles del curso
-            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onActionClick("edit", item)}>
-              Editar Curso
+              Editar curso
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onActionClick("desactive", item)}>
-              Desactivar curso
+              {item.status === 1 ? "Desactivar curso" : "Activar curso"}
             </DropdownMenuItem>
           </>
         );
