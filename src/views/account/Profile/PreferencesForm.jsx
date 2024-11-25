@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // Añade useEffect
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
@@ -10,11 +10,25 @@ const SERVER = import.meta.env.VITE_API_URL;
 export function PreferencesForm({ userData, setUserData }) {
     const [formData, setFormData] = useState(userData);
     const [isEditing, setIsEditing] = useState(false);
+    
+    // Nuevo estado para manejar las categorías seleccionadas
+    const [selectedCategories, setSelectedCategories] = useState(userData.preferences || []);
 
-    const handleSelectedCategories = (selectedCategories) => {
+    // console.log("FORMDATA", formData.preferences);
+    // console.log("Selected Categories", selectedCategories);
+
+    // Efecto para actualizar selectedCategories cuando cambia userData
+    useEffect(() => {
+        setSelectedCategories(userData.preferences || []);
+    }, [userData]);
+
+    const handleSelectedCategories = (newSelectedCategories) => {
+        setSelectedCategories(newSelectedCategories);
+        
+        // Actualiza formData con las nuevas categorías seleccionadas
         setFormData((prevFormData) => ({
             ...prevFormData,
-            preferences: selectedCategories
+            preferences: newSelectedCategories
         }));
     };
 
@@ -26,15 +40,15 @@ export function PreferencesForm({ userData, setUserData }) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     email: userData.email,
-                    newPreferences: formData.preferences,
+                    newPreferences: selectedCategories,
                 }),
             });
 
             if (response.ok) {
-                setUserData({ ...userData, preferences: formData.preferences });
+                setUserData({ ...userData, preferences: selectedCategories });
                 setIsEditing(false);
 
-                const updatedUser = { ...user, preferences: formData.preferences };
+                const updatedUser = { ...user, preferences: selectedCategories };
                 localStorage.setItem('user', JSON.stringify(updatedUser));
             }
         } catch (error) {
@@ -64,7 +78,9 @@ export function PreferencesForm({ userData, setUserData }) {
 
     const handleCancelClick = () => {
         setIsEditing(false);
-        setFormData(userData); // Reset the form to user data when canceled
+        // Restaura las categorías originales
+        setSelectedCategories(userData.preferences || []);
+        setFormData(userData);
     };
     
     return (
@@ -76,8 +92,8 @@ export function PreferencesForm({ userData, setUserData }) {
                     <div className="w-full sm:w-3/4 flex">
                         <Categories 
                             setSelectedCategories={handleSelectedCategories} 
-                            initialSelectedCategories={formData.preferences || []} // Categorías iniciales
-                            fetchGeneralCategories={isEditing} // Hacer fetch si estamos en modo edición
+                            initialSelectedCategories={userData.preferences || []} 
+                            fetchGeneralCategories={isEditing}
                         />
                     </div>
                 </div>

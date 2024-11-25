@@ -2,6 +2,7 @@ import TableComponent from "@/components/elements/TableComponent/TableComponent"
 import { useEffect, useState } from "react";
 import { DeleteModal } from "@/components/elements/ModalComponent/DeleteModal/DeleteModal";
 import GenerateCode from "@/components/elements/CodeComponent/GenerateCode/GenerateCode";
+import { LoadingState } from "@/components/elements/TableComponent/LoadingState";
 
 const SERVER = import.meta.env.VITE_API_URL;
 
@@ -9,6 +10,7 @@ export default function MembersOrg() {
   const [members, setMembers] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem('user'));
 
   const orgId = user.organization_id; // Ejemplo de ID de la organización
@@ -57,38 +59,47 @@ export default function MembersOrg() {
   };
 
   useEffect(() => {
-    fetchMembers();
+    setTimeout(() => {
+      fetchMembers();
+      setIsLoading(false);
+    }, 1500);
   }, []);
 
   return (
     <>
-      <DeleteModal
-        type={"members"}
-        isOpen={isDeleteModalOpen}
-        closeModal={() => {
-          setIsDeleteModalOpen(false);
-          setSelectedMember(null);
-        }}
-        handleDelete={() => confirmDeleteMember(selectedMember)}
-      />
-
-      {/* Componente del código de registro */}
-      <GenerateCode orgId={orgId} orgName={orgName} />
-
-      {/* Tabla de miembros */}
-      {members && members.length > 0 ? (
-        <TableComponent
-          key={members.length}
-          TableComponentData={members}
-          TableComponentType={"members"}
-          onActionClick={(action, member) =>
-            action === "delete" ? openDeleteModal(member) : null
-          }
-        />
+      {isLoading ? (
+        <LoadingState />
       ) : (
-        <div className="text-gray-500 text-center mt-4">
-          No hay miembros disponibles.
-        </div>
+        <>
+          <DeleteModal
+            type={"members"}
+            isOpen={isDeleteModalOpen}
+            closeModal={() => {
+              setIsDeleteModalOpen(false);
+              setSelectedMember(null);
+            }}
+            handleDelete={() => confirmDeleteMember(selectedMember)}
+          />
+
+          {/* Componente del código de registro */}
+          <GenerateCode orgId={orgId} orgName={orgName} />
+
+          {/* Tabla de miembros */}
+          {members && members.length > 0 ? (
+            <TableComponent
+              key={members.length}
+              TableComponentData={members}
+              TableComponentType={"members"}
+              onActionClick={(action, member) =>
+                action === "delete" ? openDeleteModal(member) : null
+              }
+            />
+          ) : (
+            <div className="text-gray-500 text-center mt-4">
+              No hay miembros disponibles.
+            </div>
+          )}
+        </>
       )}
     </>
   );

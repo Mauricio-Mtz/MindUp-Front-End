@@ -1,15 +1,16 @@
-import { useState, useEffect } from "react";
-import {DropdownMenu,DropdownMenuCheckboxItem,DropdownMenuContent,DropdownMenuItem,DropdownMenuLabel,DropdownMenuSeparator,DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
+/* eslint-disable react/prop-types */
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Factory } from "lucide-react";
 import { useDarkMode } from '../../hooks/useDarkMode';
 import { Switch } from "@/components/ui/switch";
+
 export default function HeaderAdmin({title, organization}) {
     const [isDarkMode, toggleDarkMode] = useDarkMode();
 
     return (
         <>
-            <nav className="sticky top-0 z-30 relative static shadow-md h-auto ml-12 mb-2 flex py-2 px-4 items-center justify-between gap-4 border-b bg-background  ">
+            <nav className="sticky top-0 z-30 shadow-md h-auto ml-12 mb-2 flex py-2 px-4 items-center justify-between gap-4 border-b bg-background  ">
                 {/* Título a la izquierda */}
                 <h1 className="text-xl sm:text-3xl font-bold leading-none">{title}</h1>
 
@@ -19,7 +20,7 @@ export default function HeaderAdmin({title, organization}) {
                         {organization}
                     </p>
 
-                    <DropdownMenu>
+                    {/* <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                         <Button
                             variant="outline"
@@ -35,7 +36,7 @@ export default function HeaderAdmin({title, organization}) {
                         <DropdownMenuItem>Configuración</DropdownMenuItem>
                         <DropdownMenuItem>Asistencia</DropdownMenuItem>
                         </DropdownMenuContent>
-                    </DropdownMenu>
+                    </DropdownMenu> */}
                     
                     <div className=" hidden sm:flex items-center space-x-2">
                         <span className="text-gray-600 dark:text-gray-400">🌞</span>

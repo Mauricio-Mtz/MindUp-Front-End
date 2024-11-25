@@ -1,23 +1,14 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useReactTable, getCoreRowModel, getPaginationRowModel, getSortedRowModel, getFilteredRowModel } from "@tanstack/react-table";
 import { SearchBar } from "./SearchBar";
 import { ColumnVisibilityDropdown } from "./ColumnVisibilityDropdown";
-import { LoadingState } from "./LoadingState";
 import { DataTable } from "./DataTable";
 import { PaginationControls } from "./PaginationControls";
 import { columns as baseColumns } from "./Columns";
 
 export default function TableComponent({TableComponentData, TableComponentType, onActionClick}) {
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setData(TableComponentData);
-      setIsLoading(false);
-    }, 1500);
-  }, []);
+  const data = TableComponentData;
 
   const columns = baseColumns(data, TableComponentType, onActionClick);
   const [sorting, setSorting] = useState([]);
@@ -40,27 +31,24 @@ export default function TableComponent({TableComponentData, TableComponentType, 
   });
 
   return (
-    <div className="w-full overflow-x-auto">
-      {isLoading ? (
-        <LoadingState />
-      ) : (
-        <>
-          <div className="flex items-center justify-between py-4 gap-4">
-            <SearchBar
-              filterValue={table.getColumn("fullname")?.getFilterValue() ?? ""}
-              setFilterValue={(value) => {
-                table.getColumn("fullname")?.setFilterValue(value);
-                table.getColumn("name")?.setFilterValue(value);
-              }}
-            />
-            <ColumnVisibilityDropdown columns={table.getAllColumns().filter(column => column.getCanHide() && column.id !== "actions")} />
-          </div>
+    <div className='bg-card border px-4 my-6 ' style={{borderRadius: '10px'}}>
+      <div className="w-full overflow-x-auto">
+          <>
+            <div className="flex items-center justify-between py-4 gap-4">
+              <SearchBar
+                filterValue={table.getColumn(TableComponentType === "courses" ? "name" : "fullname")?.getFilterValue() ?? ""}
+                setFilterValue={(value) => {
+                  table.getColumn(TableComponentType === "courses" ? "name" : "fullname")?.setFilterValue(value);
+                }}
+              />
+              <ColumnVisibilityDropdown columns={table.getAllColumns().filter(column => column.getCanHide() && column.id !== "actions")} />
+            </div>
 
-          <DataTable table={table} />
-          
-          <PaginationControls table={table} />
-        </>
-      )}
+            <DataTable table={table} />
+            
+            <PaginationControls table={table} />
+          </>
+      </div>
     </div>
   );
 }
