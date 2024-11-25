@@ -128,7 +128,7 @@ export default function CourseOrg() {
         />
       ) : (
         <div>No hay cursos disponibles.</div>
-      )}       
+      )}         
     </>
   );
 }
