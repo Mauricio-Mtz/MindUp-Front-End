@@ -120,16 +120,18 @@ export default function Auth() {
         type: response.success,
         description: response.message
       });
-      if (response.success) {
-
+      if (response.success) {        
         let userData = JSON.parse(localStorage.getItem('user'));
-        userData.organization_id = response.data.organization_id;
-        userData.organization_name = response.data.organization_name;
-        localStorage.setItem('user', JSON.stringify(userData));
 
         if(response.type == 'member' || response.type == 'organization'){
+          userData.organization_id = response.data.organization_id;
+          userData.organization_name = response.data.organization_name;
+          localStorage.setItem('user', JSON.stringify(userData));
+        
           navigate('/admin');
         }else if(response.type == 'student'){
+          localStorage.setItem('user', JSON.stringify(userData));
+        
           navigate('/catalog');
         }
       }
