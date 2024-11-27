@@ -23,7 +23,7 @@ export default function Navbar() {
 
     return (
         <nav className="sticky top-0 z-30 bg-white dark:bg-[#1F1F1F] mb-2 shadow-md py-2" style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.6)" }}>
-            <div className="flex items-center justify-between mx-auto px-2 sm:px-5 lg:px-10 xl:px-20">
+            <div className="flex items-center justify-between mx-auto px-2 sm:px-5 lg:px-10 xl:px-20 gap-4">
                 {/* Logo */}
                 <div 
                     className="cursor-pointer font-bold text-lg text-white hidden sm:block" 
@@ -55,8 +55,9 @@ export default function Navbar() {
                                 <DropdownMenuSeparator />
                                 <DropdownMenuGroup>
                                     <DropdownMenuItem onClick={() => navigate('/account')}>Perfil</DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => navigate('/my-courses')}>Mis cursos</DropdownMenuItem>
                                     <DropdownMenuItem onClick={() => navigate('/account/payments')}>Pagos</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => navigate('/catalog')}>Catálogo</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => navigate('/my-courses')}>Mis cursos</DropdownMenuItem>
                                 </DropdownMenuGroup>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
@@ -111,8 +112,9 @@ export default function Navbar() {
                                 {isLoggedIn ? (
                                     <>
                                         <Button variant="ghost" onClick={() => navigate('/account')}>Perfil</Button>
-                                        <Button variant="ghost" onClick={() => navigate('/my-courses')}>Mis cursos</Button>
                                         <Button variant="ghost" onClick={() => navigate('/account/payments')}>Pagos</Button>
+                                        <Button variant="ghost" onClick={() => navigate('/catalog')}>Catálogo</Button>
+                                        <Button variant="ghost" onClick={() => navigate('/my-courses')}>Mis cursos</Button>
                                     </>
                                 ) : (
                                     <Button onClick={() => navigate(`/auth`)}>Iniciar Sesión</Button>

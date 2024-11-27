@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { ProgressCircle } from '@/components/elements/progressCircle';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 
@@ -73,38 +72,51 @@ export default function Payments() {
     return (
         <>
             {loading && (
-                <div className='bg-black bg-opacity-30 fixed inset-0 flex justify-center items-center'>
-                    <div className='flex flex-col items-center'>
-                        <h1 className="text-xl font-bold text-center">Cargando</h1>
-                        <ProgressCircle />
-                    </div>
+                <div className="flex justify-center items-center h-screen">
+                    <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
                 </div>
             )}
-            <div className="flex flex-col md:flex-row justify-center items-start space-y-6 md:space-y-0 md:space-x-4 h-[550px] w-full">
-                <div className='h-full w-full md:w-8/12'>
-                    <h2 className="scroll-m-20 border-b pb-2 text-center sm:text-left text-2xl sm:text-3xl font-semibold tracking-tight">Detalles de Pago</h2>
-                    <ScrollArea className='h-full border-b'>
-                        <div className='flex gap-2'>
-                            {/* Mostrar PaymentData y PaymentMethod según las condiciones */}
-                            {paymentHistory.length > 0 ? (
-                                <>
-                                    {selectedPayment && <PaymentData paymentData={selectedPayment} />}
-                                    {/* Mostrar PaymentMethod si el pago está a punto de expirar */}
-                                    {selectedPayment && isCloseToExpiration(selectedPayment.end_date) && <PaymentMethod onPay={handlePay} suscription={suscriptionData} />}
-                                </>
-                            ) : (
-                                <>
-                                    <Subscription subscription={suscriptionData} />
-                                    <PaymentMethod onPay={handlePay} suscription={suscriptionData} />
-                                </>
-                            )}
-                        </div>
-                    </ScrollArea>
-                </div>
-                {paymentHistory.length > 0 && (
-                    <PaymentHistory paymentHistory={paymentHistory} setSelectedPayment={setSelectedPayment} />
+            <div className="flex flex-col md:flex-row justify-center items-start space-y-6 md:space-y-0 md:space-x-4 h-full w-full">
+    <div className='h-full w-full md:w-8/12'>
+        <h2 className="scroll-m-20 border-b pb-2 text-center sm:text-left text-2xl sm:text-3xl font-semibold tracking-tight">Detalles de Pago</h2>
+        <ScrollArea className='h-full border-b'>
+            <div className='flex flex-col sm:flex-row gap-4'>
+                {/* Mostrar PaymentData y PaymentMethod según las condiciones */}
+                {paymentHistory.length > 0 ? (
+                    <div className='flex flex-col sm:flex-row gap-4 w-full'>
+                        {selectedPayment && <PaymentData paymentData={selectedPayment} className="w-full sm:w-1/2" />}
+                        {/* Mostrar PaymentMethod si el pago está a punto de expirar */}
+                        {selectedPayment && isCloseToExpiration(selectedPayment.end_date) && (
+                            <PaymentMethod 
+                                onPay={handlePay} 
+                                suscription={suscriptionData} 
+                                className="w-full sm:w-1/2" 
+                            />
+                        )}
+                    </div>
+                ) : (
+                    <div className='flex flex-col sm:flex-row gap-4 w-full'>
+                        <Subscription 
+                            subscription={suscriptionData} 
+                            className="w-full sm:w-1/2" 
+                        />
+                        <PaymentMethod 
+                            onPay={handlePay} 
+                            suscription={suscriptionData} 
+                            className="w-full sm:w-1/2" 
+                        />
+                    </div>
                 )}
             </div>
+        </ScrollArea>
+    </div>
+    {paymentHistory.length > 0 && (
+        <PaymentHistory 
+            paymentHistory={paymentHistory} 
+            setSelectedPayment={setSelectedPayment} 
+        />
+    )}
+</div>
         </>
     );
 }

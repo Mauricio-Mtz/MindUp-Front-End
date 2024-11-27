@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { useGoogleLogin } from '@react-oauth/google';
 import { Verify } from './verify';
 
+const SERVER = import.meta.env.VITE_API_URL;
+
 export const Register = ({ onSubmit, setAlertData }) => {
     const [registerData, setRegisterData] = useState({
         typeUser: "none",
@@ -68,18 +70,19 @@ export const Register = ({ onSubmit, setAlertData }) => {
     };
 
     const sendVerificationEmail = (email, verificationCode) => {
-        const notificationData = {
-            to: email,
-            subject: "Verificación de Correo Electrónico",
-            text: `Gracias por registrarte. Tu código de verificación es: ${verificationCode}`,
-        };
-
-        fetch("http://localhost:3000/notifications/createNotification", {
+        fetch(`${SERVER}/notifications/createNotification`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(notificationData),
+            body: JSON.stringify({
+                to: email,
+                subject: "Verificación de Correo Electrónico",
+                type: "verifyEmail",
+                data: {
+                    verificationCode: verificationCode
+                }
+            })
         })
         .then((response) => response.json())
         .then(() => {

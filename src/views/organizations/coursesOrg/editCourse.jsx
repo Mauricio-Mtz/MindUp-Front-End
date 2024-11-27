@@ -10,7 +10,7 @@ import ListQuestions from "./components/ListQuestions";
 //url Server
 const SERVER = import.meta.env.VITE_API_URL;
 
-export default function EditAddCourse() {
+export default function EditCourse() {
   const [data, setData] = useState(null); // Almacena los datos completos del curso
   const [module, setModule] = useState(null); // Módulo seleccionado
   const [moduleIndex, setModuleIndex] = useState(null); // Índice del módulo seleccionado
@@ -41,7 +41,7 @@ export default function EditAddCourse() {
       if (result.success) {
         setData(result.data);
         setCourseName(result.data.name || ""); // Establece el nombre del curso
-        console.log("Curso cargado:", result.data);
+        // console.log("Curso cargado:", result.data);
       } else {
         console.error("Error en la respuesta del servidor.");
       }
@@ -69,19 +69,19 @@ export default function EditAddCourse() {
     setQuestion((prev) => ({ ...prev, [key]: value }));
   };
   
-  const handleOptionChange = (index, value) => {
-    setQuestion((prev) => ({
-      ...prev,
-      options: prev.options.map((opt, i) => (i === index ? value : opt)),
-    }));
-  };
+  // const handleOptionChange = (index, value) => {
+  //   setQuestion((prev) => ({
+  //     ...prev,
+  //     options: prev.options.map((opt, i) => (i === index ? value : opt)),
+  //   }));
+  // };
   
-  const handleCheckboxChange = (index) => {
-    setQuestion((prev) => ({
-      ...prev,
-      correctAnswer: prev.correctAnswer === index ? -1 : index, // Permitir deseleccionar
-    }));
-  };
+  // const handleCheckboxChange = (index) => {
+  //   setQuestion((prev) => ({
+  //     ...prev,
+  //     correctAnswer: prev.correctAnswer === index ? -1 : index, // Permitir deseleccionar
+  //   }));
+  // };
 
 
   return (
