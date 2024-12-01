@@ -129,6 +129,7 @@ export default function EditAddCourse() {
           setQuestion={setQuestion}
           fetchCourse={fetchCourse}
           course={course}
+          module={module}
         />
 
         {/* Lista secciones */}
@@ -141,6 +142,8 @@ export default function EditAddCourse() {
           setSubtitle={setSubtitle}
           setText={setText}
           setVideoUrl={setVideoUrl}
+          module={module}
+          fetchCourse={fetchCourse}
         />
 
         {/* lista Preguntas */}
@@ -150,6 +153,8 @@ export default function EditAddCourse() {
           questionIndex={questionIndex}
           setQuestion={setQuestion}
           setQuestionIndex={setQuestionIndex}
+          module={module}
+          fetchCourse={fetchCourse}
         />
       </div>
     </div>
