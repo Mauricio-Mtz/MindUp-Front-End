@@ -109,7 +109,7 @@ export default function CourseList() {
                                 className="w-full"
                                 onClick={() => navigate(`/my-courses/course/${course.name}`, { state: { course } })}
                             >
-                                Unirme al curso
+                                Continuar curso
                             </Button>
                         </CardFooter>
                     </Card>

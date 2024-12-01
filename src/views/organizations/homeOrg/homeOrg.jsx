@@ -7,7 +7,7 @@ export default function HomeOrg() {
   const handleNavigate = (route) => {
     navigate(route);
   };
-
+  
   return (
     <>
       <div className="text-center mb-6">

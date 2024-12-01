@@ -36,7 +36,7 @@ export default function Profile() {
 
     const fetchRecommendedCourses = async () => {
         try {
-            const response = await fetch(`${SERVER}/content/getRecomendedCourses`);
+            const response = await fetch(`${SERVER}/content/getCatalog?email=${user.email}`);
             const data = await response.json();
             setRecommendedCourses(data.data);
         } catch (error) {

@@ -71,34 +71,34 @@ export default function MembersOrg() {
         <LoadingState />
       ) : (
         <>
-        <DeleteModal
-          type={"members"}
-          isOpen={isDeleteModalOpen}
-          closeModal={() => {
-            setIsDeleteModalOpen(false);
-            setSelectedMember(null);
-          }}
-          handleDelete={() => confirmDeleteMember(selectedMember)}
+          <DeleteModal
+            type={"members"}
+            isOpen={isDeleteModalOpen}
+            closeModal={() => {
+              setIsDeleteModalOpen(false);
+              setSelectedMember(null);
+            }}
+            handleDelete={() => confirmDeleteMember(selectedMember)}
           />
 
-        {/* Componente del código de registro */}
-        <GenerateCode orgId={orgId} orgName={orgName} />
+          {/* Componente del código de registro */}
+          <GenerateCode orgId={orgId} orgName={orgName} />
 
-        {/* Tabla de miembros */}
-        {members && members.length > 0 ? (
-          <TableComponent
-            key={members.length}
-            TableComponentData={members}
-            TableComponentType={"members"}
-            onActionClick={(action, member) =>
-              action === "delete" ? openDeleteModal(member) : null
-            }
-          />
-        ) : (
-          <div className="text-gray-500 text-center mt-4">
-            No hay miembros disponibles.
-          </div>
-        )}
+          {/* Tabla de miembros */}
+          {members && members.length > 0 ? (
+            <TableComponent
+              key={members.length}
+              TableComponentData={members}
+              TableComponentType={"members"}
+              onActionClick={(action, member) =>
+                action === "delete" ? openDeleteModal(member) : null
+              }
+            />
+          ) : (
+            <div className="text-gray-500 text-center mt-4">
+              No hay miembros disponibles.
+            </div>
+          )}
         </>
       )}
     </>
