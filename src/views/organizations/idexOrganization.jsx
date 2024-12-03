@@ -14,6 +14,7 @@ import EditCourse from "@/views/organizations/coursesOrg/editCourse";
 export default function IndexOrganization() {
     const [title, setTitle] = useState("Inicio");
     const user = JSON.parse(localStorage.getItem('user'));
+    console.log("Usuario: ", user)
     const organization = user.organization_name;
 
     const navigate = useNavigate();

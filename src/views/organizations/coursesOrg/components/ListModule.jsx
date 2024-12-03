@@ -8,42 +8,73 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
-const ListModule = ({ data, moduleIndex, setModuleIndex, setModule, setSection, setSectionIndex, setQuestion, fetchCourse, course }) => {
+const ListModule = ({ data, moduleIndex, setModuleIndex, setModule, setSection, setSectionIndex, setQuestion, setQuestionIndex, fetchCourse, course, module }) => {
   const [nameModule, setNameModule] = useState("");
   const [level, setLevel] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const SERVER = import.meta.env.VITE_API_URL;
 
   const sendModule = async () => {
     const sendData = {
-      name: nameModule,
-      level: level,
-      courseId: course.id,
+        name: nameModule,
+        level: level,
+        courseId: course.id,
     };
 
     if (sendData.name === "" || sendData.level === "") {
-      toast.error("Llene correctamente los campos del módulo");
-      return;
+        toast.error("Llene correctamente los campos del módulo");
+        return;
     }
 
     try {
-      const response = await fetch(`${SERVER}/content/addNewModule`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(sendData),
-      });
-      const result = await response.json();
+        const response = await fetch(`${SERVER}/content/addNewModule`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(sendData),
+        });
+        const result = await response.json();
 
-      if (result.success) {
-        toast.success("Módulo agregado correctamente!");
-        fetchCourse();
-      } else {
-        toast.error("Error en la respuesta del servidor.");
-      }
+        if (result.success) {
+            toast.success("Módulo agregado correctamente!");
+            fetchCourse();
+            setIsDialogOpen(false); // Cierra el diálogo
+            setNameModule(""); // Limpia el campo del nombre
+            setLevel(""); // Limpia el campo del nivel
+        } else {
+            toast.error("Error en la respuesta del servidor.");
+        }
     } catch (err) {
-      toast.error("Error del servidor");
+        console.log("Error: ", err)
+        toast.error("Error del servidor");
+    }
+  };
+
+  const deleteModule = async () => {
+    console.log(module.id)
+    if (module.id) {
+      try {
+        const response = await fetch(`${SERVER}/content/delete-module/${module.id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+
+        if (result.success) {
+          toast.success(result.message);
+          fetchCourse();
+          setModuleIndex(null)
+        } else {
+          toast.error(result.message);
+        }
+      } catch (err) {
+        console.log("Error: ", err)
+        toast.error("Error del servidor");
+      }
     }
   };
 
@@ -66,6 +97,7 @@ const ListModule = ({ data, moduleIndex, setModuleIndex, setModule, setSection, 
                   setModuleIndex(index);
                   setSection(null);
                   setSectionIndex(null);
+                  setQuestionIndex(null);
                   setQuestion({
                     question: "",
                     options: ["", "", "", ""],
@@ -85,41 +117,55 @@ const ListModule = ({ data, moduleIndex, setModuleIndex, setModule, setSection, 
             <Skeleton className="h-4 w-full" />
           )}
         </div>
-        <Dialog>
+
+        <div className="flex flex-row gap-2">
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full mt-4">Agregar Módulo</Button>
+              <Button onClick={() => setIsDialogOpen(true)} className="w-full mt-4">
+                  Agregar Módulo
+              </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle className="mb-4">Agrega un nuevo Módulo</DialogTitle>
-            </DialogHeader>
-            <div>
-              <div className="gap-2 flex flex-col mb-4">
-                <Label>Nombre del Módulo</Label>
-                <Input
-                  placeholder="Nombre del Módulo"
-                  className="col-span-3"
-                  value={nameModule}
-                  onChange={(e) => setNameModule(e.target.value)}
-                />
+              <DialogHeader>
+                  <DialogTitle className="mb-4">Agrega un nuevo Módulo</DialogTitle>
+              </DialogHeader>
+              <div>
+                  <div className="gap-2 flex flex-col mb-4">
+                      <Label>Nombre del Módulo</Label>
+                      <Input
+                          placeholder="Nombre del Módulo"
+                          className="col-span-3"
+                          value={nameModule}
+                          onChange={(e) => setNameModule(e.target.value)}
+                      />
+                  </div>
+                  <div className="gap-2 flex flex-col">
+                      <Label>Nivel del curso</Label>
+                      <Input
+                          placeholder="1 - 10"
+                          className="col-span-3"
+                          value={level}
+                          onChange={(e) => setLevel(e.target.value)}
+                      />
+                  </div>
+                  <div className="flex w-full">
+                      <Button onClick={sendModule} className="w-full mt-4">
+                          Añadir <strong>+</strong>
+                      </Button>
+                  </div>
               </div>
-              <div className="gap-2 flex flex-col">
-                <Label>Nivel del curso</Label>
-                <Input
-                  placeholder="1 - 10"
-                  className="col-span-3"
-                  value={level}
-                  onChange={(e) => setLevel(e.target.value)}
-                />
-              </div>
-              <div className="flex w-full">
-                <Button onClick={sendModule} className="w-full mt-4">
-                  Añadir <strong>+</strong>
-                </Button>
-              </div>
-            </div>
           </DialogContent>
         </Dialog>
+          {moduleIndex != null && (
+            <Button
+              onClick={deleteModule}
+              className="w-full mt-4 bg-red-600 hover:bg-red-700"
+            >
+              Eliminar Módulo
+            </Button>
+          )}
+        </div>
+
       </CardContent>
     </Card>
   );

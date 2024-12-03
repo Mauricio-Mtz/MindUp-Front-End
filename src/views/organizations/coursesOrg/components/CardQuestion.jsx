@@ -3,56 +3,45 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
-export default function CardQuestion({
-  question,
-  setQuestion,
-  module,
-  handleQuestionChange,
-  
-}) {
+const SERVER = import.meta.env.VITE_API_URL;
+
+export default function CardQuestion({ question, questionIndex, course, module, handleQuestionChange, setQuestion, fetchCourse }) {
 
   const sendQuestion = async () => {
-    //acceder a module -> quiz {} -> questions [] -> finlQuestion 
-    var tempData = [];
-
-    
-    if(module?.quiz?.questions){
-      module.quiz.questions.map( (item) => {
-        tempData.push(item);
-      })
-    }
-
+    // Create a copy of existing questions or start with an empty array
+    const tempData = module?.quiz?.questions ? [...module.quiz.questions] : [];
+  
     const finalQuestion = {
-      options: question.options.filter((opt, i) => opt !== '').map((opt, i) => opt),
+      options: question.options.filter((opt) => opt !== '').map((opt) => opt),
       question: question.question || "",
       correctAnswer: question.correctAnswer >= 0 ? question.correctAnswer : -1,
     };
-
+  
     if(finalQuestion.question == "" || finalQuestion.correctAnswer === -1 || finalQuestion.options.length == 0){
       toast.error("Llene correctamente los campos de la pregunta");
       return;
     }
-
-    if(questionIndex != null){      
-      console.log('no ok')
-      module.quiz.questions[questionIndex] = finalQuestion;
-    }else{
-      console.log('ok')
+  
+    // If a specific question index is selected, replace that question
+    // Otherwise, push a new question
+    if (questionIndex !== null) {      
+      tempData[questionIndex] = finalQuestion;
+    } else {
       tempData.push(finalQuestion);
     }
-    
+      
     const quizData = {
       questions: tempData,
       passing_score: module?.quiz?.passing_score || 0.85
     }
+  
     const sendData = {
       quiz: JSON.stringify(quizData),
       id: module.id || -1,
       courseId: course.id
     }
-    
-    console.log('sendData: ', quizData);
     
     try {
       const response = await fetch(
@@ -63,23 +52,18 @@ export default function CardQuestion({
          },
          body: JSON.stringify(sendData),
        }
-     )
-     //.then(response => response.json())
-     //const response = await fetch(`${SERVER}/content/getCourse/${course.id}`);
-     const result = await response.json();
-
+      )
+      const result = await response.json();
+  
       if (result.success) {        
         toast.success("Pregunta agregada correctamente");
-        setQuestion({
-          question: "", // Título de la pregunta
-          options: ["", "", "", ""], // Opciones por defecto
-          correctAnswer: -1, // Índice de la respuesta correcta (-1 indica ninguna seleccionada)
-        })
+        setQuestion(null)
         fetchCourse();
       } else {
         toast.error("Error en la respuesta del servidor.");
       }
-    }catch (err) {
+    } catch (err) {
+      console.error("Error: ", err)
       toast.error("Error del servidor");
     }
   };
@@ -108,12 +92,18 @@ export default function CardQuestion({
                   value={question?.options?.[index] || ""}
                   disabled={!module}
                   onChange={(e) =>
-                    setQuestion((prev) => ({
-                      ...prev,
-                      options: prev.options.map((opt, i) =>
-                        i === index ? e.target.value : opt
-                      ),
-                    }))
+                    setQuestion((prev) => {
+                      // Ensure options is an array, defaulting to 4 empty strings if not
+                      const newOptions = Array.isArray(prev.options) 
+                        ? [...prev.options] 
+                        : ["", "", "", ""];
+                      
+                      // Ensure the array has at least 4 elements
+                      while (newOptions.length < 4) newOptions.push("");
+                      
+                      newOptions[index] = e.target.value;
+                      return { ...prev, options: newOptions };
+                    })
                   }
                 />
                 <Checkbox
@@ -132,7 +122,7 @@ export default function CardQuestion({
         </form>
       </CardContent>
       <CardFooter className="flex justify-center gap-4">
-        <Button className="w-full" onClick={sendQuestion}>
+        <Button className="w-full" onClick={sendQuestion} disabled={!module}>
           Guardar
         </Button>
       </CardFooter>

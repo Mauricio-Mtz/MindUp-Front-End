@@ -98,12 +98,10 @@ export default function Payments() {
                     <div className='flex flex-col sm:flex-row gap-4 w-full'>
                         <Subscription 
                             subscription={suscriptionData} 
-                            className="w-full sm:w-1/2" 
                         />
                         <PaymentMethod 
                             onPay={handlePay} 
                             suscription={suscriptionData} 
-                            className="w-full sm:w-1/2" 
                         />
                     </div>
                 )}

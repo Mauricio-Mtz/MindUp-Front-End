@@ -4,82 +4,65 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
-export default function CardSection({ 
-  section, 
-  subtitle, 
-  text, 
-  videoUrl, 
-  module, 
-  handleSectionChange, 
-  setSection   
-}) {
-    const sendSection = async () => {
-        //module -> content [] -> NuevaSection
-        // Utiliza valores predeterminados si los inputs están vacíos
-        var tempData = [];
-        if(module?.content){
-          module?.content.map( (item) => {
-            console.log(item);
-            tempData.push(item);
-          })
-        }
-        const sectionData = {
-          subTitle: section?.subTitle || subtitle || "",
-          text: section?.text || text || "",
-          videoUrl: section?.videoUrl || videoUrl || "",
-        };
-        if(sectionData.text == "" || sectionData.subTitle == "" ){
-          toast.error("Escriba el subtitulo y el texto del contenido.");
-          return;
-        }
-    
-        if(section != null){
-          module.content[sectionIndex] = sectionData;
-        }else{
-          
-          tempData.push(sectionData);
-        }
-        
-        const sendData = {
-          content: JSON.stringify(tempData),
-          id: module.id || -1,
-          courseId: course.id
-        }
-        
-        console.log('sendData: ', sectionData);
-        try {
-           const response = await fetch(
-            `${SERVER}/content/addNewContent`,{
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(sendData),
-            }
-          )
-          //.then(response => response.json())
-          //const response = await fetch(`${SERVER}/content/getCourse/${course.id}`);
-          const result = await response.json();
-    
-          if (result.success) {    
-            toast.success("Seccion agregada correctamente");    
-            console.log("Curso cargado:", result.rows);
-            setSubtitle("");
-            setText("");
-            setVideoUrl("");
-            setSection(null); 
-            fetchCourse();
-          } else {
-            toast.error("Error en la respuesta del servidor.");
-          }
-        } catch (err) {
-          toast.error("Error del servidor");
-        }
-    
-    
-        //console.log("Valores de la sección:", sendData);
+const SERVER = import.meta.env.VITE_API_URL;
+
+export default function CardSection({ section, sectionIndex, course, module, handleSectionChange, setSection, fetchCourse }) {
+
+  const sendSection = async () => {
+    // Create a copy of existing content or start with an empty array
+    const tempData = module?.content ? [...module.content] : [];
+  
+    const sectionData = {
+      subTitle: section?.subTitle || "",
+      text: section?.text || "",
+      videoUrl: section?.videoUrl || "",
     };
+  
+    if(sectionData.text == "" || sectionData.subTitle == "" ){
+      toast.error("Escriba el subtitulo y el texto del contenido.");
+      return;
+    }
+    
+    // If a specific section index is selected, replace that section
+    // Otherwise, push a new section
+    if (sectionIndex !== null) {      
+      tempData[sectionIndex] = sectionData;
+    } else {
+      tempData.push(sectionData);
+    }
+  
+    const sendData = {
+      content: JSON.stringify(tempData),
+      id: module.id || -1,
+      courseId: course.id
+    }
+  
+    try {
+      const response = await fetch(
+        `${SERVER}/content/addNewContent`,{
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(sendData),
+        }
+      )
+      const result = await response.json();
+  
+      if (result.success) {    
+        toast.success("Seccion agregada correctamente");
+        setSection(null); 
+        fetchCourse();
+      } else {
+        toast.error("Error en la respuesta del servidor.");
+      }
+    } catch (err) {
+      console.error("Error: ", err)
+      toast.error("Error del servidor");
+    }
+  };
 
   return (
     <Card>
@@ -90,7 +73,7 @@ export default function CardSection({
         <form className="flex flex-col space-y-3">
           <Input
             className="w-full"
-            value={section?.subTitle || subtitle}
+            value={section?.subTitle || ""}
             placeholder="Título de la sección"
             disabled={!module}
             onChange={(e) => handleSectionChange("subTitle", e.target.value)}
@@ -101,7 +84,7 @@ export default function CardSection({
               placeholder="Escribe el contenido de la sección del módulo"
               id="message"
               className="show-scrollbar"
-              value={section?.text || text}
+              value={section?.text || ""}
               disabled={!module}
               onChange={(e) => handleSectionChange("text", e.target.value)}
             />
@@ -110,10 +93,10 @@ export default function CardSection({
             <Label htmlFor="url">URL para video didáctico</Label>
             <Input
               className="w-full"
-              value={section?.videoUrl || videoUrl}
-              disabled={!module}
+              value={section?.videoUrl || ""}
               placeholder="https://www.youtube.com/..."
               id="url"
+              disabled={!module}
               onChange={(e) => handleSectionChange("videoUrl", e.target.value)}
             />
           </div>
@@ -126,10 +109,15 @@ export default function CardSection({
           onClick={() => {
             setSection(null);
           }}
+          disabled={!module}
         >
           Limpiar
         </Button>
-        <Button className="w-[50%]" onClick={sendSection}>
+        <Button 
+          className="w-[50%]" 
+          onClick={sendSection}
+          disabled={!module}
+        >
           Guardar
         </Button>
       </CardFooter>

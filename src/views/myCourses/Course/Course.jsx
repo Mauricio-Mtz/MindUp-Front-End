@@ -124,23 +124,13 @@ export default function Course() {
       if (progress > 0) return 'in-progress';
       return 'available';
     };
-  
-    // const getModuleStatusColor = (status) => {
-    //   switch (status) {
-    //     case 'completed': return 'bg-green-700 border-green-500';
-    //     case 'in-progress': return 'bg-blue-700 border-blue-500';
-    //     case 'locked': return 'bg-gray-700 border-gray-500';
-    //     default: return 'text-gray-900 bg-white border-gray-900';
-    //   }
-    // };
-
 
     const handleModuleClick = (module) => {
         navigate(`/my-courses/module/${module.name}`, { 
         state: { 
             course, 
             selectedModuleId: module.id, 
-            courseProgressId: courseProgress.id 
+            courseProgressId: courseProgress.id,
         } 
         });
     };

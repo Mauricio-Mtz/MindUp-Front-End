@@ -86,7 +86,7 @@ export default function CourseOrg() {
       const data = await response.json();
       fetchCourses();
       // Redirigir o manejar el curso creado después del fetch (opcional)
-      navigate(`/admin/edit/${data.name}`, { state: { course: data } });
+      navigate(`/admin/edit/${data.course.name}`, { state: { course: data.course } });
   
     } catch (error) {
       console.error("Error al añadir el curso:", error);

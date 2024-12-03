@@ -1,17 +1,37 @@
 /* eslint-disable react/prop-types */
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+const SERVER = import.meta.env.VITE_API_URL;
 
-const ListSection = ({
-  moduleIndex,
-  data,
-  sectionIndex,
-  setSection,
-  setSectionIndex,
-  setSubtitle,
-  setText,
-  setVideoUrl,
-}) => {
+const ListSection = ({ moduleIndex, data, sectionIndex, setSection, setSectionIndex, module, fetchCourse }) => {
+  
+  const deleteSection = async () => {
+    try {
+      const response = await fetch(`${SERVER}/content/delete-section/${sectionIndex}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          moduleId: module.id
+        }),
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        toast.success(result.message);
+        fetchCourse();
+        setSectionIndex(null)
+      } else {
+        toast.error(result.message);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Error del servidor");
+    }
+  };
+
   return (
     <Card>
       <CardHeader className="py-3">
@@ -41,18 +61,26 @@ const ListSection = ({
             <div className="text-center">Seleccione un módulo</div>
           )}
         </div>
-        <Button
-          className="w-full mt-4"
-          onClick={() => {
-            setSubtitle("");
-            setText("");
-            setVideoUrl("");
-            setSection(null);
-            setSectionIndex(null);
-          }}
-        >
-          Añadir Sección
-        </Button>
+        <div className="flex flex-row gap-2">
+          <Button
+            className="w-full mt-4"
+            disabled={!module}
+            onClick={() => {
+              setSection(null);
+              setSectionIndex(null);
+            }}
+          >
+            Añadir Sección
+          </Button>
+          {sectionIndex != null && (
+            <Button
+              onClick={deleteSection}
+              className="w-full mt-4 bg-red-600 hover:bg-red-700"
+            >
+              Eliminar Sección
+            </Button>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

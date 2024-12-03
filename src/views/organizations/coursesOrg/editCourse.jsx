@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { useLocation } from "react-router-dom";
-//import Componets
+
 import CardSection from "./components/CardSection";
 import CardQuestion from "./components/CardQuestion";
 import ListModule from "./components/ListModule";
 import ListSection from "./components/ListSection";
 import ListQuestions from "./components/ListQuestions";
-//url Server
+
 const SERVER = import.meta.env.VITE_API_URL;
 
 export default function EditCourse() {
@@ -23,25 +23,27 @@ export default function EditCourse() {
     options: ["", "", "", ""], // Opciones por defecto
     correctAnswer: -1, // Índice de la respuesta correcta (-1 indica ninguna seleccionada)
   });
-
-  const [subtitle, setSubtitle] = useState("");
-  const [text, setText] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
-
+  
   const location = useLocation();
   const { course } = location.state || {};
 
   const fetchCourse = async () => {
     if (!course?.id) return;
-
+  
     try {
       const response = await fetch(`${SERVER}/content/getCourse/${course.id}`);
       const result = await response.json();
-
+  
       if (result.success) {
+        // Completely replace the existing data
         setData(result.data);
-        setCourseName(result.data.name || ""); // Establece el nombre del curso
-        // console.log("Curso cargado:", result.data);
+        setCourseName(result.data.name || "");
+        
+        // Reset other states if needed
+        setModule(null);
+        setModuleIndex(null);
+        setSectionIndex(null);
+        setQuestionIndex(null);
       } else {
         console.error("Error en la respuesta del servidor.");
       }
@@ -58,31 +60,28 @@ export default function EditCourse() {
     if (section) {
       setSection({ ...section, [key]: value });
     } else {
-      // Si no hay una sección seleccionada, actualiza los valores locales predeterminados
-      if (key === "subTitle") setSubtitle(value);
-      if (key === "text") setText(value);
-      if (key === "videoUrl") setVideoUrl(value);
+      setSection({ [key]: value });
     }
   };
   
   const handleQuestionChange = (key, value) => {
-    setQuestion((prev) => ({ ...prev, [key]: value }));
+    setQuestion((prev) => {
+      // If prev is null, create a new question object
+      if (!prev) {
+        return {
+          question: key === 'question' ? value : '',
+          options: ["", "", "", ""],
+          correctAnswer: -1
+        };
+      }
+  
+      // If prev exists, update it normally
+      return {
+        ...prev,
+        [key]: value
+      };
+    });
   };
-  
-  // const handleOptionChange = (index, value) => {
-  //   setQuestion((prev) => ({
-  //     ...prev,
-  //     options: prev.options.map((opt, i) => (i === index ? value : opt)),
-  //   }));
-  // };
-  
-  // const handleCheckboxChange = (index) => {
-  //   setQuestion((prev) => ({
-  //     ...prev,
-  //     correctAnswer: prev.correctAnswer === index ? -1 : index, // Permitir deseleccionar
-  //   }));
-  // };
-
 
   return (
     <div className="mt-4 mb-6 flex gap-4 flex-wrap sm:flex-nowrap">
@@ -91,6 +90,7 @@ export default function EditCourse() {
         {/* Input para el nombre del curso */}
         <Input
           className="w-full"
+          disabled
           placeholder="Nombre del curso"
           value={courseName}
           onChange={(e) => setCourseName(e.target.value)}
@@ -99,20 +99,28 @@ export default function EditCourse() {
         {/* Card para contenido de la sección */}
         <CardSection
           section={section}
-          subtitle={subtitle}
-          text={text}
-          videoUrl={videoUrl}
+          sectionIndex={sectionIndex}
+          course={data}
+
           module={module}
+
           handleSectionChange={handleSectionChange}
           setSection={setSection}
+
+          fetchCourse={fetchCourse}
         />
         {/* Card para cuestionario */}
         <CardQuestion
           question={question}
+          questionIndex={questionIndex}
+          course={data}
+
           module={module}
-          setQuestion={setQuestion}
-          handleQuestionChange={handleQuestionChange}
           
+          handleQuestionChange={handleQuestionChange}
+          setQuestion={setQuestion}
+
+          fetchCourse={fetchCourse}
         />
       </div>
 
@@ -126,9 +134,11 @@ export default function EditCourse() {
           setModule={setModule}
           setSection={setSection}
           setSectionIndex={setSectionIndex}
+          setQuestionIndex={setQuestionIndex}
           setQuestion={setQuestion}
           fetchCourse={fetchCourse}
           course={course}
+          module={module}
         />
 
         {/* Lista secciones */}
@@ -138,9 +148,8 @@ export default function EditCourse() {
           sectionIndex={sectionIndex}
           setSection={setSection}
           setSectionIndex={setSectionIndex}
-          setSubtitle={setSubtitle}
-          setText={setText}
-          setVideoUrl={setVideoUrl}
+          module={module}
+          fetchCourse={fetchCourse}
         />
 
         {/* lista Preguntas */}
@@ -150,6 +159,8 @@ export default function EditCourse() {
           questionIndex={questionIndex}
           setQuestion={setQuestion}
           setQuestionIndex={setQuestionIndex}
+          module={module}
+          fetchCourse={fetchCourse}
         />
       </div>
     </div>
