@@ -27,10 +27,11 @@ export default function CourseList() {
 
         const fetchCourses = async () => {
         try {
+            console.log(user.preferences)
             const endpoint =
             user.preferences && user.preferences.length > 0
                 ? `${SERVER}/content/getCatalog?email=${user.email}`
-                : `${SERVER}/content/getAllCourses`;
+                : `${SERVER}/content/getCatalog`;
 
             const response = await fetch(endpoint, {
                 method: "GET",

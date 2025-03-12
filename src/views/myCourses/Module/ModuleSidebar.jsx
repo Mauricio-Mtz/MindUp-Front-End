@@ -8,7 +8,7 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHe
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-export function ModuleSidebar({ modules, setModule, course }) {
+export function ModuleSidebar({ modules, setModule, course, currentModuleId }) {
   const navigate = useNavigate();
   const sheetCloseRef = useRef(null);
   
@@ -78,9 +78,10 @@ export function ModuleSidebar({ modules, setModule, course }) {
             <SheetDescription>Módulos del curso</SheetDescription>
           </SheetHeader>
           <div className="grid gap-4 py-4">
-          {modules.map((module) => {
+            {modules.map((module) => {
               const status = getModuleStatus(module);
               const currentStyle = statusStyles[status];
+              const isCurrentModule = module.id === currentModuleId;
 
               return (
                 <div
@@ -91,13 +92,18 @@ export function ModuleSidebar({ modules, setModule, course }) {
                     border-2 rounded-lg p-2
                     ${currentStyle.card}
                     ${status !== 'locked' ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'}
-                    group`
+                    group`,
+                    // Add a ring to highlight the current module
+                    isCurrentModule && 'ring-2 ring-primary-500 ring-offset-2'
                   )}
                   onClick={() => handleModuleSelect(module.id, status)}
                 >
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <span className={`text-sm text-right ${currentStyle.text}`}>{module.progress}%</span>
-                    <h3 className={`text-sm font-sans ${currentStyle.text} break-words w-full text-center`}>{module.name}</h3>
+                    <h3 className={`text-sm font-sans ${currentStyle.text} break-words w-full text-center`}>
+                      {module.name}
+                      {isCurrentModule && <span className="ml-2 text-xs text-primary-500">(Módulo actual)</span>}
+                    </h3>
                   </div>
                 </div>
               );

@@ -120,7 +120,10 @@ export function AddModal({ isOpen, closeModal, handleAdd }) {
               <Categories 
                 mode="edit"
                 setSelectedCategories={handleCategoryChange} 
-                initialSelectedCategories={[]}
+                initialSelectedCategories={[
+                  "Matemáticas",
+                  "Español"
+                ]}
               />
             </div>
           </div>

@@ -195,7 +195,7 @@ export const Register = ({ onSubmit, setAlertData }) => {
                         <img src="/assets/svg/google-logo.svg" alt="" width={"20px"} />
                         <span className="flex-1 text-center">Registrar con Google</span>
                     </Button>
-                    <a className="text-sm text-muted-foreground text-blue-500" href="/politicas">Políticas de privacidad</a>
+                    {/* <a className="text-sm text-muted-foreground text-blue-500" href="/politicas">Políticas de privacidad</a> */}
                 </div>
             </CardContent>
         </Card>

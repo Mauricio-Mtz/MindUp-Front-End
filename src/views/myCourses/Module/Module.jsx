@@ -108,6 +108,7 @@ export default function Module() {
         }))} 
         setModule={handleModuleChange} 
         course={course} 
+        currentModuleId={moduleId} 
       />
       <div>
         {content ? (
@@ -121,9 +122,7 @@ export default function Module() {
           <ContentLoader />
         )}
         <PaginationControls 
-          module={moduleId} 
-          setModule={handleModuleChange} 
-          maxModules={availableModules.length}
+          setModule={handleModuleChange}
           currentIndex={currentModuleIndex}
           modules={availableModules}
         />
