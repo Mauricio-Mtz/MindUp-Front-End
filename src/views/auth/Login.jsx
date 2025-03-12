@@ -120,7 +120,7 @@ export const Login = ({ onSubmit, setAlertData }) => {
                 value={loginData.password}
                 onChange={handleInputChange}
               />
-              <a className='text-sm text-muted-foreground' href="">¿Olvidaste tu contraseña?</a>
+              {/* <a className='text-sm text-muted-foreground' href="">¿Olvidaste tu contraseña?</a> */}
             </div>
           </div>
           <Button type="submit" className="w-full mt-auto" id="login">
@@ -132,7 +132,7 @@ export const Login = ({ onSubmit, setAlertData }) => {
             <img src="/assets/svg/google-logo.svg" alt="" width={"20px"} />
             <span className="flex-1 text-center">Iniciar sesión con Google</span>
           </Button>
-          <a className="text-sm text-muted-foreground text-blue-500" href="/politicas">Políticas de privacidad</a>
+          {/* <a className="text-sm text-muted-foreground text-blue-500" href="/politicas">Políticas de privacidad</a> */}
         </div>
       </CardContent>
     </Card>

@@ -14,6 +14,9 @@ export default function CourseList() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [courses, setCourses] = useState([]);
+    const [filteredCourses, setFilteredCourses] = useState([]); // Estado para almacenar los cursos filtrados
+    const [categories, setCategories] = useState([]); // Estado para las categorías
+    const [selectedCategory, setSelectedCategory] = useState("all"); // Categoría seleccionada
     const [currentPage, setCurrentPage] = useState(1);
     const coursesPerPage = 8; // Número de cursos por página
     
@@ -49,14 +52,52 @@ export default function CourseList() {
                 setLoading(false);
             }
         };
+
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch(`${SERVER}/content/getCategories`, {
+                    method: "GET",
+                });
+                const res = await response.json();
+                if (res.success) {
+                    setCategories(res.data); // Guarda las categorías
+                }
+            } catch (error) {
+                console.error("Error al obtener las categorías:", error);
+            }
+        };
     
+        fetchCategories();
         fetchCourses();
     }, []);
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const searchQuery = queryParams.get("search");
+
+        let filtered = courses;
+
+        if (searchQuery) {
+            filtered = filtered.filter((course) =>
+            course.name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
+        
+        if (selectedCategory !== "all") {
+            const normalizedCategory = selectedCategory.trim().toLowerCase();
+            filtered = filtered.filter((course) => {
+                const courseCategories = course.category?.map((cat) => cat.trim().toLowerCase());
+                return courseCategories?.includes(normalizedCategory);
+            });
+        }
+
+        setFilteredCourses(filtered);
+    }, [location.search, courses, selectedCategory]);
 
     // Calcular los índices de los cursos a mostrar
     const indexOfLastCourse = currentPage * coursesPerPage;
     const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-    const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
+    const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse);
     const totalPages = Math.ceil(courses.length / coursesPerPage);
 
     return (
@@ -64,14 +105,20 @@ export default function CourseList() {
             <div className='flex flex-col sm:flex-row justify-between items-center gap-4'>
                 <h1 className='text-2xl sm:text-3xl font-bold md:mb-0'>Mis cursos</h1>
                 <div className="w-full sm:w-[250px]">
-                    <Select>
+                    <Select
+                        value={selectedCategory}
+                        onValueChange={(value) => setSelectedCategory(value)}
+                    >
                         <SelectTrigger id="framework">
                             <SelectValue placeholder="Todos" />
                         </SelectTrigger>
                         <SelectContent position="popper">
                             <SelectItem value="all">Todos</SelectItem>
-                            <SelectItem value="next">Next.js</SelectItem>
-                            <SelectItem value="react">React</SelectItem>
+                            {categories.map((category, index) => (
+                                <SelectItem key={index} value={category}>
+                                {category}
+                                </SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </div>
@@ -85,35 +132,39 @@ export default function CourseList() {
                 </div>
             }
             <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {currentCourses.map((course) => (
-                    <Card key={course.id} className="w-full max-w-full h-[450px] flex flex-col justify-between mx-auto">
-                        <CardHeader>
-                            <CardTitle>{course.name}</CardTitle>
-                            <CardDescription><b>{course.organization}</b></CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex-grow flex items-center justify-center">
-                            <div className="flex flex-col items-center justify-between h-full">
-                                <img
-                                    src={`https://codeflex.space/images/courses/${course.img}`}
-                                    alt="img"
-                                    className="w-full max-h-[170px] object-cover"
-                                    style={{ borderRadius: "0.5rem" }}
-                                    onError={(e) => { e.target.src = "/assets/images/no-img.png"; }}
-                                />
-                                <p className="text-center max-h-[75px] overflow-hidden text-ellipsis align-top">{course.description}</p>
-                            </div>
-                        </CardContent>
-                        <CardFooter>
-                            <Button
-                                style={{ backgroundColor: "#303a53" }}
-                                className="w-full"
-                                onClick={() => navigate(`/my-courses/course/${course.name}`, { state: { course } })}
-                            >
-                                Continuar curso
-                            </Button>
-                        </CardFooter>
-                    </Card>
-                ))}
+                {currentCourses.length > 0 ? (
+                    currentCourses.map((course) => (
+                        <Card key={course.id} className="w-full max-w-full h-[450px] flex flex-col justify-between mx-auto">
+                            <CardHeader>
+                                <CardTitle>{course.name}</CardTitle>
+                                <CardDescription><b>{course.organization}</b></CardDescription>
+                            </CardHeader>
+                            <CardContent className="flex-grow flex items-center justify-center">
+                                <div className="flex flex-col items-center justify-between h-full">
+                                    <img
+                                        src={`https://codeflex.space/images/courses/${course.img}`}
+                                        alt="img"
+                                        className="w-full max-h-[170px] object-cover"
+                                        style={{ borderRadius: "0.5rem" }}
+                                        onError={(e) => { e.target.src = "/assets/images/no-img.png"; }}
+                                    />
+                                    <p className="text-center max-h-[75px] overflow-hidden text-ellipsis align-top">{course.description}</p>
+                                </div>
+                            </CardContent>
+                            <CardFooter>
+                                <Button
+                                    style={{ backgroundColor: "#303a53" }}
+                                    className="w-full"
+                                    onClick={() => navigate(`/my-courses/course/${course.name}`, { state: { course } })}
+                                >
+                                    Continuar curso
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    ))
+                ) : (
+                    <p>No se encontraron cursos</p>
+                )}
             </div>
 
             {/* Paginación */}

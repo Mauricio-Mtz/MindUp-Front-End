@@ -36,16 +36,11 @@ export function AddModal({ isOpen, closeModal, handleAdd }) {
     setCourseData((prev) => ({ ...prev, img: file }));
   };
 
-  const handleCategoryChange = (value) => {
-    setCourseData((prev) => {
-      const isSelected = prev.category.includes(value);
-      return {
-        ...prev,
-        category: isSelected
-          ? prev.category.filter((item) => item !== value)
-          : [...prev.category, value],
-      };
-    });
+  const handleCategoryChange = (newCategories) => {
+    setCourseData((prev) => ({
+      ...prev,
+      category: newCategories
+    }));
   };
 
   const handleAddClick = () => {
@@ -122,10 +117,13 @@ export function AddModal({ isOpen, closeModal, handleAdd }) {
               Categorías
             </Label>
             <div className="col-span-3 space-y-2 border rounded-md p-2">
-              <Categories
-                setSelectedCategories={handleCategoryChange}
-                initialSelectedCategories={[]}
-                fetchGeneralCategories={true}
+              <Categories 
+                mode="edit"
+                setSelectedCategories={handleCategoryChange} 
+                initialSelectedCategories={[
+                  "Matemáticas",
+                  "Español"
+                ]}
               />
             </div>
           </div>

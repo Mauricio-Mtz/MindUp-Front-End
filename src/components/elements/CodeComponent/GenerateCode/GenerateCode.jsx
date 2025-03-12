@@ -43,20 +43,20 @@ export default function GenerateCode({ orgId, orgName }) {
   };
 
   return (
-    <div className="shadow-md rounded-lg my-4 text-center">
-      <h2 className="text-xl font-bold mb-2">Código de Registro</h2>
-      <p className="mb-4">
+    <div className="w-full max-w-md mx-auto p-4 text-center">
+      <h2 className="text-lg sm:text-xl font-bold mb-2">Código de Registro</h2>
+      <p className="text-sm sm:text-base mb-4 px-2">
         Comparte este código con los miembros para que puedan registrarse en la organización:
       </p>
-      <div className="flex justify-center gap-2 items-center">
-        <div className="flex items-center gap-2 border rounded-sm  max-w-lg">
-          <div className="font-mono text-lg  overflow-x-auto whitespace-nowrap">
+      <div className="flex flex-col sm:flex-row justify-center items-center gap-2 w-full">
+        <div className="flex items-center w-full max-w-xs sm:max-w-lg border rounded-sm">
+          <div className="flex-grow px-2 py-1 font-mono text-sm sm:text-base overflow-x-auto whitespace-nowrap">
             {isCodeVisible ? orgCode : maskedCode}
           </div>
           <Button
             variant="ghost"
             onClick={toggleCodeVisibility}
-            className="rounded-sm shadow-md transition duration-300"
+            className="rounded-sm shadow-md transition duration-300 p-2"
           >
             {isCodeVisible ? <FaEyeSlash /> : <FaEye />}
           </Button>
@@ -64,7 +64,7 @@ export default function GenerateCode({ orgId, orgName }) {
         <Button
           variant="outline"
           onClick={handleCopyCode}
-          className="rounded-sm shadow-md transition duration-300"
+          className="rounded-sm shadow-md transition duration-300 w-full sm:w-auto"
         >
           {copySuccess ? <FaCheck /> : <FaCopy />}
         </Button>

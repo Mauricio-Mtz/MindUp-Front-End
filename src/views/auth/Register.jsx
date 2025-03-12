@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { useGoogleLogin } from '@react-oauth/google';
 import { Verify } from './verify';
 
+const SERVER = import.meta.env.VITE_API_URL;
+
 export const Register = ({ onSubmit, setAlertData }) => {
     const [registerData, setRegisterData] = useState({
         typeUser: "none",
@@ -68,18 +70,19 @@ export const Register = ({ onSubmit, setAlertData }) => {
     };
 
     const sendVerificationEmail = (email, verificationCode) => {
-        const notificationData = {
-            to: email,
-            subject: "Verificación de Correo Electrónico",
-            text: `Gracias por registrarte. Tu código de verificación es: ${verificationCode}`,
-        };
-
-        fetch("http://localhost:3000/notifications/createNotification", {
+        fetch(`${SERVER}/notifications/createNotification`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(notificationData),
+            body: JSON.stringify({
+                to: email,
+                subject: "Verificación de Correo Electrónico",
+                type: "verifyEmail",
+                data: {
+                    verificationCode: verificationCode
+                }
+            })
         })
         .then((response) => response.json())
         .then(() => {
@@ -192,7 +195,7 @@ export const Register = ({ onSubmit, setAlertData }) => {
                         <img src="/assets/svg/google-logo.svg" alt="" width={"20px"} />
                         <span className="flex-1 text-center">Registrar con Google</span>
                     </Button>
-                    <a className="text-sm text-muted-foreground text-blue-500" href="/politicas">Políticas de privacidad</a>
+                    {/* <a className="text-sm text-muted-foreground text-blue-500" href="/politicas">Políticas de privacidad</a> */}
                 </div>
             </CardContent>
         </Card>

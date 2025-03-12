@@ -63,6 +63,20 @@ export default function CourseDetail() {
     const user = JSON.parse(localStorage.getItem('user'));
     
     try {
+      // First, check subscription status
+      const subscriptionResponse = await fetch(`${SERVER}/payments/getSubscriptionStatusByStudent?email=${user.email}`);
+      const subscriptionResult = await subscriptionResponse.json();
+  
+      // If subscription is not active, show appropriate message and prevent enrollment
+      if (!subscriptionResult.success) {
+        setAlertData({
+          type: false,
+          description: subscriptionResult.message
+        });
+        return;
+      }
+  
+      // If subscription is active, proceed with course enrollment
       const response = await fetch(`${SERVER}/users/enrollCourse`, {
         method: 'POST',
         headers: {
@@ -71,7 +85,7 @@ export default function CourseDetail() {
         body: JSON.stringify({ courseId: initialCourse.id, studentEmail: user.email }),
       });
       const result = await response.json();
-
+  
       if (result.success) {
         navigate('/my-courses');
       } else {
@@ -82,8 +96,11 @@ export default function CourseDetail() {
         });
       }
     } catch (err) {
-      console.error('Error al inscribirse en el curso', err);
-      setEnrollmentDialog(true);
+      console.error('Error durante el proceso de inscripción', err);
+      setAlertData({
+        type: false,
+        description: 'Ocurrió un error durante el proceso de inscripción.'
+      });
     }
   };
 

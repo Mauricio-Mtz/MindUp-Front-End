@@ -9,11 +9,12 @@ import CourseOrg from "@/views/organizations/coursesOrg/coursesOrg";
 import Reports from "@/views/organizations/reportsOrg/reportsOrg";
 import Members from "@/views/organizations/membersOrg/membersOrg";
 import Statistics from "@/views/organizations/stadisticsOrg/stadisticsOrg";
-import EditAddCourse from "@/views/organizations/coursesOrg/edit_Add_Course";
+import EditCourse from "@/views/organizations/coursesOrg/editCourse";
 
 export default function IndexOrganization() {
     const [title, setTitle] = useState("Inicio");
     const user = JSON.parse(localStorage.getItem('user'));
+    console.log("Usuario: ", user)
     const organization = user.organization_name;
 
     const navigate = useNavigate();
@@ -53,8 +54,7 @@ export default function IndexOrganization() {
                         <Route path="/reports" element={<Reports />} />
                         <Route path="/members" element={<Members />} />
                         <Route path="/stadistic" element={<Statistics />} />
-                        <Route path="/edit/:name" element={<EditAddCourse />} />
-                        <Route path="/add" element={<EditAddCourse />} />
+                        <Route path="/edit/:name" element={<EditCourse />} />
                     </Routes>
                 </main>
             </div>
