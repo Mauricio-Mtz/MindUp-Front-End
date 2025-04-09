@@ -7,6 +7,7 @@ import { BookOpenIcon, ClockIcon, LockIcon, CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import CommentsSection from './CommentsSection';
 
 const SERVER = import.meta.env.VITE_API_URL;
 
@@ -218,6 +219,8 @@ export default function CourseDetail() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+          {/* Sección de comentarios - agregar esto */}
+          {course && <CommentsSection courseId={course.id} />}
         </div>
       )}
     </>
